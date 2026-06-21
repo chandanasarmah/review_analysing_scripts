@@ -1,0 +1,250 @@
+{
+  "metadata": {
+    "description": "Research sources for Spotify music discovery analysis",
+    "project": "PM Fellowship - Music Discovery Platform",
+    "created": "2026-06-21",
+    "total_sources": 19,
+    "note": "Use a web scraper or manual fetching to extract content from these URLs"
+  },
+  "medium_articles": [
+    {
+      "id": "medium_001",
+      "title": "How to Discover New Music on Spotify",
+      "author": "Stephanie Kim",
+      "url": "https://medium.com/@stephaniesjkim/how-to-discover-new-music-on-spotify-72bb449fb50",
+      "date": "2015-12-29",
+      "source_type": "medium",
+      "topics": ["discovery", "playlists", "features"]
+    },
+    {
+      "id": "medium_002",
+      "title": "The Spotify Discover Weekly and Release Radar Algorithm Explained",
+      "author": "Roadtrips and Playlists",
+      "url": "https://roadtripsandplaylists.medium.com/the-spotify-discover-weekly-and-release-radar-algorithm-explained-32a611df77fc",
+      "date": "2021-07-26",
+      "source_type": "medium",
+      "topics": ["algorithm", "discover_weekly", "release_radar"]
+    },
+    {
+      "id": "medium_003",
+      "title": "The Strange Magic of Spotify's Discover Weekly",
+      "author": "André Klein",
+      "url": "https://medium.com/swlh/the-strange-magic-of-spotifys-discover-weekly-40645d9b8dba",
+      "date": "2019-11-01",
+      "source_type": "medium",
+      "topics": ["algorithm", "discover_weekly", "personalization"]
+    },
+    {
+      "id": "medium_004",
+      "title": "I Tracked Spotify for 14 Days: Here's Why You Can't Discover New Music",
+      "author": "Nimbal Kary Ashraj",
+      "url": "https://medium.com/@nimbalkaryashraj53/i-tracked-spotify-for-14-days-heres-why-you-can-t-discover-new-music-cde69cad9cf8",
+      "date": "unknown",
+      "source_type": "medium",
+      "topics": ["discovery_problems", "algorithm", "user_experience"]
+    },
+    {
+      "id": "medium_005",
+      "title": "A UI/UX Case Study on Spotify",
+      "author": "Chris Li",
+      "url": "https://medium.com/@cli100601/a-ui-ux-case-study-on-spotify-91a05994521b",
+      "date": "2022-08-13",
+      "source_type": "medium",
+      "topics": ["ux", "shuffle", "podcast_integration", "recommendations"]
+    },
+    {
+      "id": "medium_006",
+      "title": "UX Review (or Rant): Spotify Search, Playlists & Recommendations",
+      "author": "Divine Seibidor",
+      "url": "https://medium.com/@divine.seibidor/ux-review-or-rant-spotify-search-playlists-recommendations-ed2e64f48fc7",
+      "date": "2025-08-19",
+      "source_type": "medium",
+      "topics": ["ux_problems", "search", "shuffle", "recommendations"]
+    },
+    {
+      "id": "medium_007",
+      "title": "The Shuffle Showdown: Why Spotify and YouTube Music Play Your Songs the Way They Do",
+      "author": "Shivachandra",
+      "url": "https://medium.com/@shivachandra9490/the-shuffle-showdown-why-spotify-and-youtube-music-play-your-songs-the-way-they-do-9afaa67758f8",
+      "date": "2025-07-16",
+      "source_type": "medium",
+      "topics": ["shuffle", "algorithm", "randomness"]
+    },
+    {
+      "id": "medium_008",
+      "title": "Apple Music or Spotify: What Streaming Music Platform is Better?",
+      "author": "Kobe Onye",
+      "url": "https://medium.com/@KobeOnye/apple-music-or-spotify-what-streaming-music-platform-is-better-41f386ca0dcd",
+      "date": "2024-01-01",
+      "source_type": "medium",
+      "topics": ["comparison", "shuffle", "recommendations", "ui"]
+    },
+    {
+      "id": "medium_009",
+      "title": "7 Ways How Spotify's Algorithm Delivers Personalized Music Recommendations",
+      "author": "Keen to Learn",
+      "url": "https://keentolearn.medium.com/7-ways-how-spotifys-algorithm-delivers-personalized-music-recommendations-ebfbc934d90f",
+      "date": "unknown",
+      "source_type": "medium",
+      "topics": ["algorithm", "personalization", "recommendations"]
+    },
+    {
+      "id": "medium_010",
+      "title": "UX Case Study: Social and Review Function for Spotify",
+      "author": "Xu",
+      "url": "https://medium.com/@xxu523/ux-case-study-social-and-review-function-for-spotify-908f5986c43c",
+      "date": "unknown",
+      "source_type": "medium",
+      "topics": ["ux", "social", "community", "reviews"]
+    },
+    {
+      "id": "medium_011",
+      "title": "Beyond Algorithms: A Human-Centric Concept for Spotify's Music Discovery",
+      "author": "Osman Warsi",
+      "url": "https://medium.com/@osmanwarsi/beyond-algorithms-a-human-centric-concept-for-spotifys-music-discovery-9ffbcf5f07d7",
+      "date": "unknown",
+      "source_type": "medium",
+      "topics": ["discovery", "human_centered_design", "algorithm_critique"]
+    }
+  ],
+  "substack_articles": [
+    {
+      "id": "substack_001",
+      "title": "Explaining Spotify's Discovery Mode",
+      "author": "Music Help Desk",
+      "url": "https://musichelpdesk.substack.com/p/explaining-spotifys-discovery-mode",
+      "date": "unknown",
+      "source_type": "substack",
+      "topics": ["discovery_mode", "features", "recommendations"]
+    }
+  ],
+  "reddit_discussions": [
+    {
+      "id": "reddit_001",
+      "title": "Smart Shuffle is the worst thing in existence",
+      "subreddit": "r/truespotify",
+      "url": "https://www.reddit.com/r/truespotify/comments/1ma2nk9/smart_shuffle_is_the_worst_thing_in_existence/",
+      "source_type": "reddit",
+      "topics": ["shuffle", "user_complaints", "discovery"]
+    },
+    {
+      "id": "reddit_002",
+      "title": "Smart Shuffle is one of the worst things Spotify ever added",
+      "subreddit": "r/spotify",
+      "url": "https://www.reddit.com/r/spotify/comments/1ef8pdf/smart_shuffle_is_one_of_the_worst_things_spotify/",
+      "source_type": "reddit",
+      "topics": ["shuffle", "user_complaints"]
+    },
+    {
+      "id": "reddit_003",
+      "title": "Why is Spotify Smart Shuffle so Bad?",
+      "subreddit": "r/TooAfraidToAsk",
+      "url": "https://www.reddit.com/r/TooAfraidToAsk/comments/1e2ra32/why_is_spotify_smart_shuffle_so_bad/",
+      "source_type": "reddit",
+      "topics": ["shuffle", "user_experience"]
+    },
+    {
+      "id": "reddit_004",
+      "title": "Spotify DJ kinda sucks",
+      "subreddit": "r/truespotify",
+      "url": "https://www.reddit.com/r/truespotify/comments/1r6f21d/spotify_dj_kinda_sucks/",
+      "source_type": "reddit",
+      "topics": ["ai_dj", "features", "discovery"]
+    },
+    {
+      "id": "reddit_005",
+      "title": "What do you think about Spotify AI DJ?",
+      "subreddit": "r/Music",
+      "url": "https://www.reddit.com/r/Music/comments/1bfelax/what_do_you_think_about_spotify_ai_dj/",
+      "source_type": "reddit",
+      "topics": ["ai_dj", "user_opinions"]
+    },
+    {
+      "id": "reddit_006",
+      "title": "Prompted playlists are amazing",
+      "subreddit": "r/spotify",
+      "url": "https://www.reddit.com/r/spotify/comments/1qp4c9r/prompted_playlists_are_amazing/",
+      "source_type": "reddit",
+      "topics": ["ai_playlists", "positive_feedback"]
+    },
+    {
+      "id": "reddit_007",
+      "title": "Daylist is everything Spotify should've been",
+      "subreddit": "r/truespotify",
+      "url": "https://www.reddit.com/r/truespotify/comments/16u8ula/daylist_is_everything_spotify_shouldve_been/",
+      "source_type": "reddit",
+      "topics": ["daylist", "discovery", "personalization"]
+    },
+    {
+      "id": "reddit_008",
+      "title": "I hate the Spotify algorithm",
+      "subreddit": "r/truespotify",
+      "url": "https://www.reddit.com/r/truespotify/comments/1j5tkbb/i_hate_the_spotify_algorithm/",
+      "source_type": "reddit",
+      "topics": ["algorithm", "autoplay", "user_frustration"]
+    },
+    {
+      "id": "reddit_009",
+      "title": "Spotify Blend Playlists Just Aren't Good",
+      "subreddit": "r/spotify",
+      "url": "https://www.reddit.com/r/spotify/comments/tvri1h/spotify_blend_playlists_just_arent_good/",
+      "source_type": "reddit",
+      "topics": ["blend", "social_discovery", "recommendations"]
+    }
+  ],
+  "spotify_official_forums": [
+    {
+      "id": "spotify_forum_001",
+      "title": "New Queue UI Customer Feedback",
+      "url": "https://community.spotify.com/t5/Content-Questions/New-Queue-UI-Customer-Feedback/td-p/6647974",
+      "source_type": "spotify_official",
+      "topics": ["queue_ui", "ux", "user_feedback"]
+    },
+    {
+      "id": "spotify_forum_002",
+      "title": "Ongoing Issues Review April 2026",
+      "url": "https://community.spotify.com/t5/Community-Blog/Ongoing-Issues-Review-April-2026/ba-p/7423811",
+      "source_type": "spotify_official",
+      "topics": ["bugs", "smart_shuffle", "playlist_issues"]
+    }
+  ],
+  "spotify_research": [
+    {
+      "id": "research_001",
+      "title": "Understanding and Evaluating User Satisfaction with Music Discovery",
+      "author": "Spotify Research",
+      "url": "https://research.atspotify.com/2018/07/understanding-and-evaluating-user-satisfaction-with-music-discovery",
+      "date": "2018-07",
+      "source_type": "spotify_research",
+      "topics": ["discovery", "user_satisfaction", "research"]
+    },
+    {
+      "id": "research_002",
+      "title": "User Intents and Satisfaction with Slate Recommendations",
+      "author": "Spotify Research",
+      "url": "https://research.atspotify.com/user-intents-and-satisfaction-with-slate-recommendations",
+      "date": "unknown",
+      "source_type": "spotify_research",
+      "topics": ["recommendations", "user_intent", "slate"]
+    }
+  ],
+  "summary": {
+    "by_source": {
+      "medium": 11,
+      "reddit": 9,
+      "substack": 1,
+      "spotify_official_forums": 2,
+      "spotify_research": 2
+    },
+    "by_topic": {
+      "shuffle": 6,
+      "algorithm": 6,
+      "discovery": 8,
+      "recommendations": 7,
+      "ux": 6,
+      "user_complaints": 5,
+      "ai_features": 4,
+      "personalization": 4
+    }
+  }
+}

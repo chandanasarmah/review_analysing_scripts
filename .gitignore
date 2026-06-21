@@ -1,0 +1,37 @@
+# ─── Private / sensitive data (never commit) ───────────────────────────
+# Raw scraped reviews contain real reviewer names (PII) + personal notes
+input/*.txt
+
+# Generated output contains PII (author names) and large data files
+output/
+
+# Internal Claude Code config and plans
+.claude/
+CLAUDE.md
+
+# Fellowship assignment material (proprietary)
+Product Manager Fellowship.txt
+PM_Fellowship_Project_Plan.txt
+To build a robust AI.docx
+
+# ─── Secrets ───────────────────────────────────────────────────────────
+.env
+*.key
+*_secret*
+ANTHROPIC_API_KEY*
+
+# ─── Python ────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# ─── OS / Editor ───────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
