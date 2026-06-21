@@ -22,16 +22,14 @@ INPUT_DIR  = BASE / "input"
 OUTPUT_DIR = BASE / "output"
 REPORT_HTML = OUTPUT_DIR / "report.html"
 
-SLOT_APPLE  = "apple ios.txt"
-SLOT_GP1    = "google play store review.txt"
-SLOT_GP2    = "google playstore review 2.txt"
-SLOT_REDDIT = "reddit.txt"
-
 TYPE_LABEL = {
     "apple_ios":   "Apple iOS reviews",
     "google_play": "Google Play reviews",
     "reddit":      "Reddit posts",
 }
+
+# .txt files that live in input/ but are NOT review files
+NON_REVIEW_FILES = {"RESEARCH_ARTICLES_FULL.txt"}
 
 st.set_page_config(
     page_title="Spotify Review Analyser",
@@ -182,28 +180,37 @@ def detect_file_type(content: str):
     return None, ("; ".join(hints) or "no recognisable patterns found")
 
 
-def save_uploaded_file(content_bytes: bytes, file_type: str):
+def save_uploaded_file(content_bytes: bytes, original_name: str):
+    """Save uploaded file to input/ using original filename, avoiding collisions."""
     INPUT_DIR.mkdir(exist_ok=True)
-    content = content_bytes.decode("utf-8", errors="replace")
-    if file_type == "apple_ios":
-        dest = INPUT_DIR / SLOT_APPLE
-    elif file_type == "reddit":
-        dest = INPUT_DIR / SLOT_REDDIT
-    elif file_type == "google_play":
-        dest = INPUT_DIR / SLOT_GP1 if not (INPUT_DIR / SLOT_GP1).exists() else INPUT_DIR / SLOT_GP2
-    else:
-        raise ValueError(f"Unknown file_type: {file_type}")
-    dest.write_text(content, encoding="utf-8")
+    safe = re.sub(r'[<>:"/\\|?*]', '_', original_name).strip()
+    dest = INPUT_DIR / safe
+    if dest.exists():
+        stem, suffix = Path(safe).stem, Path(safe).suffix
+        counter = 2
+        while dest.exists():
+            dest = INPUT_DIR / f"{stem}_{counter}{suffix}"
+            counter += 1
+    dest.write_bytes(content_bytes)
     return dest.name
 
 
 def slot_status():
-    return {
-        "apple_ios":     (INPUT_DIR / SLOT_APPLE).exists(),
-        "google_play_1": (INPUT_DIR / SLOT_GP1).exists(),
-        "google_play_2": (INPUT_DIR / SLOT_GP2).exists(),
-        "reddit":        (INPUT_DIR / SLOT_REDDIT).exists(),
-    }
+    """Return per-type counts of review files currently in input/."""
+    counts = {"apple_ios": 0, "google_play": 0, "reddit": 0}
+    if not INPUT_DIR.exists():
+        return counts
+    for f in INPUT_DIR.glob("*.txt"):
+        if f.name in NON_REVIEW_FILES:
+            continue
+        try:
+            content = f.read_text(encoding="utf-8", errors="replace")[:8192]
+            ft, _ = detect_file_type(content)
+            if ft:
+                counts[ft] += 1
+        except Exception:
+            pass
+    return counts
 
 
 # ── Session state ─────────────────────────────────────────────────────────────
@@ -227,11 +234,12 @@ with st.sidebar:
 
     # Upload
     status = slot_status()
-    all_present = status["apple_ios"] and status["google_play_1"] and status["reddit"]
+    has_any = any(status.values())
 
-    with st.expander("Upload review files", expanded=not all_present):
+    with st.expander("Upload review files", expanded=not has_any):
         st.caption(
-            "Upload any `.txt` review files — format is detected automatically. "
+            "Upload one or more `.txt` review files — format is detected automatically. "
+            "You can upload multiple files of the same type. "
             "Supports Apple iOS, Google Play, and Reddit exports."
         )
         uploaded_files = st.file_uploader(
@@ -277,7 +285,7 @@ with st.sidebar:
                     )
                 else:
                     try:
-                        slot = save_uploaded_file(content_bytes, file_type)
+                        slot = save_uploaded_file(content_bytes, uf.name)
                         st.success(f"**{uf.name}** → {TYPE_LABEL[file_type]}\n_Detected: {reason}_\nSaved as `input/{slot}`")
                         st.session_state.processed_uploads.add(uid)
                         st.session_state.processed_slots[uid] = slot
@@ -287,28 +295,22 @@ with st.sidebar:
     status = slot_status()
     st.markdown("---")
 
-    # Input file status
+    # Input file status — show counts per type
     try:
-        issues     = validate_inputs()
-        error_files = {fname for lvl, fname, _ in issues if lvl == "error"}
-        warn_files  = {fname for lvl, fname, _ in issues if lvl == "warning"}
+        issues    = validate_inputs()
+        warn_files = {fname for lvl, fname, _ in issues if lvl == "warning"}
     except Exception:
-        issues, error_files, warn_files = [], set(), set()
-
-    def _icon(fname):
-        if fname in error_files: return "🔴"
-        if fname in warn_files:  return "🟡"
-        return "🟢"
+        issues, warn_files = [], set()
 
     st.markdown("**Input files**")
-    st.markdown(f"{'🟢' if status['apple_ios'] else '🔴'} Apple iOS reviews")
-    if status["google_play_1"] and status["google_play_2"]:
-        st.markdown("🟢 Google Play reviews (2 files)")
-    elif status["google_play_1"]:
-        st.markdown(f"{_icon(SLOT_GP1)} Google Play reviews (1 of 2)")
-    else:
-        st.markdown("🔴 Google Play reviews")
-    st.markdown(f"{'🟢' if status['reddit'] else '🔴'} Reddit posts")
+    for type_key, label in TYPE_LABEL.items():
+        n = status[type_key]
+        icon = "🟢" if n > 0 else "🔴"
+        st.markdown(f"{icon} {label}: **{n} file{'s' if n != 1 else ''}**")
+
+    for lvl, fname, msg in issues:
+        if lvl == "warning":
+            st.warning(f"**{fname}**: {msg}")
 
     for lvl, fname, msg in issues:
         if lvl == "warning":
@@ -320,7 +322,7 @@ with st.sidebar:
                         help="Re-download research articles (needs internet). Uncheck to reuse cached data.")
     st.session_state.fetch_research = fetch
 
-    has_minimum = status["apple_ios"] or status["google_play_1"] or status["reddit"]
+    has_minimum = any(status.values())
     if st.button(
         "▶  Run Full Workflow",
         use_container_width=True, type="primary",

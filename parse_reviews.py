@@ -10,84 +10,75 @@ OUTPUT.mkdir(exist_ok=True)
 
 LOG_LINES = []
 
-# Minimum expected records per file — warn if we fall below these
-MIN_RECORDS = {
-    "apple ios.txt":                   10,
-    "google play store review.txt":    30,
-    "google playstore review 2.txt":   50,
-    "reddit.txt":                      10,
+# .txt files in input/ that are not review files
+NON_REVIEW_FILES = {"RESEARCH_ARTICLES_FULL.txt"}
+
+# Minimum records per file before we warn (applied per-file regardless of name)
+MIN_RECORDS_BY_TYPE = {
+    "apple_ios":   5,
+    "google_play": 10,
+    "reddit":      5,
 }
+
+
+def detect_file_type(content: str):
+    """Detect review file type from content. Returns (type_str, reason) or (None, reason)."""
+    count = len(re.findall(r"^r/(truespotify|spotify)\b", content, re.IGNORECASE | re.MULTILINE))
+    if count >= 1:
+        return "reddit", f"found {count} subreddit header(s)"
+
+    numbered = len(re.findall(r"^\d+\.\s", content, re.MULTILINE))
+    has_rating = bool(re.search(r"Rating:\s*\d", content))
+    has_reviewer = bool(re.search(r"Reviewer:\s*\S", content))
+    if numbered >= 3 and (has_rating or has_reviewer):
+        return "apple_ios", f"found {numbered} numbered review(s) with Rating/Reviewer fields"
+
+    month_re = (
+        r"(January|February|March|April|May|June|July|August|September|"
+        r"October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)"
+        r"\s+\d{1,2},\s+\d{4}"
+    )
+    date_matches = len(re.findall(month_re, content, re.IGNORECASE))
+    if date_matches >= 5:
+        return "google_play", f"found {date_matches} date lines"
+
+    return None, "no recognisable patterns found"
 
 
 def validate_inputs():
     """
-    Check all input files exist, are non-empty, and look structurally correct.
+    Scan input/ for .txt review files, detect their type, and validate structure.
     Returns a list of (level, filename, message) tuples.
-      level: "error"   — file missing or empty; parsing will produce 0 records
-             "warning" — file present but format may be wrong
+      level: "error"   — unreadable or unrecognised format
+             "warning" — recognised but suspiciously few records
     """
     issues = []
 
-    checks = {
-        "apple ios.txt": {
-            "pattern": re.compile(r"^\d+\.\s", re.MULTILINE),
-            "description": "numbered reviews (e.g. '1. Title')",
-            "min_matches": 5,
-        },
-        "google play store review.txt": {
-            "pattern": re.compile(
-                r"(January|February|March|April|May|June|July|August|"
-                r"September|October|November|December|Jan|Feb|Mar|Apr|"
-                r"Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2},\s+\d{4}",
-                re.IGNORECASE,
-            ),
-            "description": "date lines (e.g. 'August 29, 2025')",
-            "min_matches": 10,
-        },
-        "google playstore review 2.txt": {
-            "pattern": re.compile(
-                r"(January|February|March|April|May|June|July|August|"
-                r"September|October|November|December|Jan|Feb|Mar|Apr|"
-                r"Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2},\s+\d{4}",
-                re.IGNORECASE,
-            ),
-            "description": "date lines (e.g. 'August 29, 2025')",
-            "min_matches": 20,
-        },
-        "reddit.txt": {
-            "pattern": re.compile(r"^r/(truespotify|spotify)\b", re.IGNORECASE | re.MULTILINE),
-            "description": "subreddit headers (e.g. 'r/spotify')",
-            "min_matches": 1,
-        },
-    }
+    if not INPUT.exists():
+        issues.append(("error", "input/", "input/ directory not found"))
+        return issues
 
-    for filename, spec in checks.items():
-        path = INPUT / filename
+    txt_files = sorted(
+        f for f in INPUT.glob("*.txt") if f.name not in NON_REVIEW_FILES
+    )
 
-        if not path.exists():
-            issues.append(("error", filename, "File not found in input/"))
+    if not txt_files:
+        issues.append(("error", "input/", "No review .txt files found in input/"))
+        return issues
+
+    for path in txt_files:
+        if path.stat().st_size == 0:
+            issues.append(("error", path.name, "File is empty (0 bytes)"))
             continue
-
-        size = path.stat().st_size
-        if size == 0:
-            issues.append(("error", filename, "File is empty (0 bytes)"))
-            continue
-
         try:
             content = path.read_text(encoding="utf-8", errors="replace")
         except Exception as e:
-            issues.append(("error", filename, f"Could not read file: {e}"))
+            issues.append(("error", path.name, f"Could not read file: {e}"))
             continue
 
-        matches = spec["pattern"].findall(content)
-        if len(matches) < spec["min_matches"]:
-            issues.append((
-                "warning",
-                filename,
-                f"Only {len(matches)} {spec['description']} found "
-                f"(expected at least {spec['min_matches']}). "
-                "File may be in the wrong format — see INPUT_FORMAT.md.",
-            ))
+        ft, reason = detect_file_type(content[:8192])
+        if ft is None:
+            issues.append(("warning", path.name, f"Unrecognised format ({reason})"))
 
     return issues
 
@@ -545,9 +536,9 @@ def parse_reddit(filepath):
 # ---------------------------------------------------------------------------
 
 def main():
-    # ── Validate input files before parsing ──────────────────────────────────
+    # ── Validate ──────────────────────────────────────────────────────────────
     issues = validate_inputs()
-    errors = [i for i in issues if i[0] == "error"]
+    errors   = [i for i in issues if i[0] == "error"]
     warnings = [i for i in issues if i[0] == "warning"]
 
     for level, fname, msg in issues:
@@ -556,8 +547,8 @@ def main():
 
     if errors:
         print(
-            f"\n{len(errors)} input file(s) are missing or unreadable. "
-            "Fix the errors above and re-run. See INPUT_FORMAT.md for the expected format.",
+            f"\n{len(errors)} input file(s) have errors. "
+            "Fix the errors above and re-run.",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -565,36 +556,45 @@ def main():
     if warnings:
         print(
             f"\n{len(warnings)} file(s) may be in an unexpected format. "
-            "Parsing will continue but record counts may be low. "
-            "Check output/parse_log.txt after the run.",
+            "Parsing will continue — check output/parse_log.txt for skipped blocks.",
             file=sys.stderr,
         )
 
-    # ── Parse ─────────────────────────────────────────────────────────────────
+    # ── Discover and parse all review files ───────────────────────────────────
+    txt_files = sorted(
+        f for f in INPUT.glob("*.txt") if f.name not in NON_REVIEW_FILES
+    )
+
+    all_reviews = []
     file_counts = {}
 
-    apple = parse_apple(INPUT / "apple ios.txt")
-    file_counts["apple ios.txt"] = len(apple)
-    all_reviews = apple
+    for path in txt_files:
+        try:
+            content = path.read_text(encoding="utf-8", errors="replace")
+        except Exception as e:
+            print(f"[ERROR] Could not read {path.name}: {e}", file=sys.stderr)
+            continue
 
-    gp1 = parse_google_play(INPUT / "google play store review.txt", "google_play")
-    file_counts["google play store review.txt"] = len(gp1)
-    all_reviews += gp1
+        ft, _ = detect_file_type(content[:8192])
 
-    gp2 = parse_google_play(INPUT / "google playstore review 2.txt", "google_play")
-    file_counts["google playstore review 2.txt"] = len(gp2)
-    all_reviews += gp2
+        if ft == "apple_ios":
+            records = parse_apple(path)
+        elif ft == "google_play":
+            records = parse_google_play(path, "google_play")
+        elif ft == "reddit":
+            records = parse_reddit(path)
+        else:
+            print(f"[WARNING] {path.name}: skipped (unrecognised format)", file=sys.stderr)
+            continue
 
-    reddit = parse_reddit(INPUT / "reddit.txt")
-    file_counts["reddit.txt"] = len(reddit)
-    all_reviews += reddit
+        file_counts[path.name] = (ft, len(records))
+        all_reviews.extend(records)
 
-    # ── Warn if per-file counts are suspiciously low ──────────────────────────
-    for fname, count in file_counts.items():
-        minimum = MIN_RECORDS.get(fname, 0)
-        if count < minimum:
+        minimum = MIN_RECORDS_BY_TYPE.get(ft, 0)
+        if len(records) < minimum:
             print(
-                f"[WARNING] {fname}: only {count} records parsed (expected >= {minimum}). "
+                f"[WARNING] {path.name}: only {len(records)} records parsed "
+                f"(expected >= {minimum} for {ft}). "
                 "Check output/parse_log.txt for skipped blocks.",
                 file=sys.stderr,
             )
@@ -607,11 +607,11 @@ def main():
     log_path = OUTPUT / "parse_log.txt"
     with open(log_path, "w", encoding="utf-8") as f:
         f.write("\n".join(LOG_LINES) + "\n")
-        f.write(f"\n--- Per-file counts ---\n")
-        for fname, count in file_counts.items():
-            minimum = MIN_RECORDS.get(fname, 0)
+        f.write("\n--- Per-file counts ---\n")
+        for fname, (ft, count) in file_counts.items():
+            minimum = MIN_RECORDS_BY_TYPE.get(ft, 0)
             status = "OK" if count >= minimum else "LOW"
-            f.write(f"  [{status}] {fname}: {count} records\n")
+            f.write(f"  [{status}] {fname} ({ft}): {count} records\n")
 
     from collections import Counter
     sources = Counter(r["source"] for r in all_reviews)
@@ -622,10 +622,10 @@ def main():
     print(f"With rating:    {has_rating}")
     print(f"Skipped/logged: {len(LOG_LINES)} entries")
     print(f"\nPer-file breakdown:")
-    for fname, count in file_counts.items():
-        minimum = MIN_RECORDS.get(fname, 0)
+    for fname, (ft, count) in file_counts.items():
+        minimum = MIN_RECORDS_BY_TYPE.get(ft, 0)
         status = "OK" if count >= minimum else "LOW - check parse_log.txt"
-        print(f"  {fname}: {count} records [{status}]")
+        print(f"  {fname} ({ft}): {count} records [{status}]")
     print(f"\nFiles saved to: {OUTPUT}")
     print(f"  - {out_path.name}")
     print(f"  - {log_path.name}")
