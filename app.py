@@ -308,6 +308,11 @@ with st.sidebar:
     st.markdown("---")
 
     # ── Upload section ────────────────────────────────────────────────────────
+    # Track which (name, size) pairs have already been saved this session so
+    # we don't re-save on every render (Streamlit preserves uploader state).
+    if "processed_uploads" not in st.session_state:
+        st.session_state.processed_uploads = set()
+
     status = slot_status()
     all_present = status["apple_ios"] and status["google_play_1"] and status["reddit"]
 
@@ -325,10 +330,19 @@ with st.sidebar:
         )
 
         if uploaded_files:
-            saved_any = False
             for uf in uploaded_files:
+                uid = (uf.name, uf.size)
+
+                if uid in st.session_state.processed_uploads:
+                    # Already saved this file — just show quiet confirmation
+                    file_type, _ = detect_file_type(
+                        uf.getvalue()[:8192].decode("utf-8", errors="replace")
+                    )
+                    if file_type:
+                        st.caption(f"✓ {uf.name} ({TYPE_LABEL[file_type]})")
+                    continue
+
                 content_bytes = uf.getvalue()
-                # Decode a sample for detection (first 8 KB is enough)
                 sample = content_bytes[:8192].decode("utf-8", errors="replace")
                 file_type, reason = detect_file_type(sample)
 
@@ -345,25 +359,21 @@ with st.sidebar:
                         f"_Detected: {reason}_  \n"
                         f"Saved as `{slot}`"
                     )
-                    saved_any = True
+                    st.session_state.processed_uploads.add(uid)
 
-            if saved_any:
-                st.rerun()
+    # Refresh slot status after any saves above
+    status = slot_status()
 
     st.markdown("---")
 
     # ── Input file status ─────────────────────────────────────────────────────
     try:
         issues = validate_inputs()
-        error_files = {fname for _, fname, _ in issues if _ == "error" or issues[0][0] == "error"}
-        warn_files  = {fname for _, fname, _ in issues if issues[0][0] == "warning"}
-        # Rebuild properly
         error_files = {fname for lvl, fname, _ in issues if lvl == "error"}
         warn_files  = {fname for lvl, fname, _ in issues if lvl == "warning"}
     except Exception:
-        error_files, warn_files = set(), set()
+        issues, error_files, warn_files = [], set(), set()
 
-    status = slot_status()
     st.markdown("**Input files**")
 
     def _icon(fname):
