@@ -214,6 +214,25 @@ def slot_status():
 
 
 # ── Session state ─────────────────────────────────────────────────────────────
+if "session_initialized" not in st.session_state:
+    # Fresh session — wipe leftover review files and stale outputs from any previous run
+    st.session_state.session_initialized = True
+    if INPUT_DIR.exists():
+        for f in INPUT_DIR.glob("*.txt"):
+            if f.name not in NON_REVIEW_FILES:
+                try:
+                    f.unlink()
+                except Exception:
+                    pass
+    for _out in ["report.html", "reviews_unified.json",
+                 "reviews_categorised.json", "insights_report.json"]:
+        _p = OUTPUT_DIR / _out
+        if _p.exists():
+            try:
+                _p.unlink()
+            except Exception:
+                pass
+
 if "processed_uploads" not in st.session_state:
     st.session_state.processed_uploads = set()   # set of (name, size) tuples
 if "processed_slots" not in st.session_state:
