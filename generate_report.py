@@ -96,6 +96,20 @@ discovery_related = sum(1 for r in reviews if r.get("discovery_related"))
 rated_reviews = [r for r in reviews if "rating" in r]
 avg_rating = round(sum(r["rating"] for r in rated_reviews) / len(rated_reviews), 2) if rated_reviews else None
 
+# Per-theme review sets — embedded in the page for JS drill-down
+theme_data = {}
+for r in reviews:
+    for t in r.get("themes", []):
+        theme_data.setdefault(t, []).append({
+            "source":    r.get("source", ""),
+            "text":      r.get("text", "")[:700],
+            "date":      r.get("date", ""),
+            "author":    r.get("author", "unknown"),
+            "sentiment": r.get("sentiment", ""),
+            "key_quote": r.get("key_quote", ""),
+        })
+theme_data_json = json.dumps(theme_data, ensure_ascii=False)
+
 
 # ---------------------------------------------------------------------------
 # HTML building blocks
@@ -110,7 +124,7 @@ def stat_card(value, label_text, sub=""):
     </div>'''
 
 
-def bar_chart(counts_dict, label_map, max_items=10):
+def bar_chart(counts_dict, label_map, max_items=10, clickable_themes=False):
     if not counts_dict:
         return '<p class="muted">No data.</p>'
     items = sorted(counts_dict.items(), key=lambda kv: kv[1], reverse=True)[:max_items]
@@ -118,7 +132,9 @@ def bar_chart(counts_dict, label_map, max_items=10):
     rows = []
     for key, val in items:
         pct = (val / top) * 100 if top else 0
-        rows.append(f'''<div class="bar-row">
+        click = f' onclick="showTheme(\'{key}\')" title="Explore {esc(label(key, label_map))} reviews"' if clickable_themes else ''
+        cls = 'bar-row clickable' if clickable_themes else 'bar-row'
+        rows.append(f'''<div class="{cls}"{click}>
           <div class="bar-label">{esc(label(key, label_map))}</div>
           <div class="bar-track"><div class="bar-fill" style="width:{pct:.1f}%"></div></div>
           <div class="bar-value">{val}</div>
@@ -181,8 +197,8 @@ def render_question(q, idx):
 
     # Q1: theme frequency
     if "theme_frequency" in q:
-        body_parts.append('<h4>Theme Breakdown</h4>')
-        body_parts.append(bar_chart(q["theme_frequency"], THEME_LABELS))
+        body_parts.append('<h4>Theme Breakdown <span class="click-hint">Click a bar to explore reviews</span></h4>')
+        body_parts.append(bar_chart(q["theme_frequency"], THEME_LABELS, clickable_themes=True))
 
     # Q2: by source
     if "by_source" in q:
@@ -248,6 +264,42 @@ def render_question(q, idx):
 
 
 questions_html = "".join(render_question(q, i + 1) for i, q in enumerate(questions))
+
+
+# ---------------------------------------------------------------------------
+# Theme Explorer cards (clickable overview grid)
+# ---------------------------------------------------------------------------
+
+def theme_explorer_cards():
+    cards = []
+    for theme_key in THEME_LABELS:
+        count = theme_counts.get(theme_key, 0)
+        if count == 0:
+            continue
+        theme_revs = theme_data.get(theme_key, [])
+        sent = Counter(r["sentiment"] for r in theme_revs)
+        total = len(theme_revs) or 1
+        neg_pct = round(sent.get("negative", 0) / total * 100)
+        pos_pct = round(sent.get("positive", 0) / total * 100)
+        mix_pct = 100 - neg_pct - pos_pct
+        top_q = next((r["key_quote"] for r in theme_revs if r.get("key_quote")), "")
+        quote_html = f'<div class="tc-quote">{esc(top_q[:120])}…</div>' if top_q else ""
+        cards.append(f'''<div class="theme-card" onclick="showTheme('{theme_key}')">
+          <div class="tc-header">
+            <span class="tc-label">{esc(THEME_LABELS[theme_key])}</span>
+            <span class="tc-count">{count}</span>
+          </div>
+          <div class="tc-sent-bar">
+            <div class="ts-neg" style="width:{neg_pct}%" title="{neg_pct}% negative"></div>
+            <div class="ts-pos" style="width:{pos_pct}%" title="{pos_pct}% positive"></div>
+            <div class="ts-mix" style="width:{mix_pct}%" title="{mix_pct}% mixed"></div>
+          </div>
+          <div class="tc-meta">{neg_pct}% negative · {pos_pct}% positive</div>
+          {quote_html}
+        </div>''')
+    return '<div class="theme-grid">' + "".join(cards) + "</div>"
+
+theme_cards_html = theme_explorer_cards()
 
 
 # ---------------------------------------------------------------------------
@@ -512,10 +564,95 @@ page = f'''<!DOCTYPE html>
 
   footer {{ text-align: center; padding: 40px 24px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); margin-top: 48px; }}
 
+  /* Clickable bars */
+  .bar-row.clickable {{ cursor: pointer; border-radius: 8px; padding: 2px 4px; margin: 0 -4px; transition: background 0.15s; }}
+  .bar-row.clickable:hover {{ background: rgba(29,185,84,0.08); }}
+  .bar-row.clickable:hover .bar-label {{ color: var(--green); }}
+  .click-hint {{ font-size: 11px; font-weight: 400; color: var(--muted); letter-spacing: 0; text-transform: none; }}
+
+  /* Theme explorer cards */
+  .theme-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }}
+  .theme-card {{
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+  }}
+  .theme-card:hover {{ border-color: var(--green); background: var(--card-2); }}
+  .tc-header {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }}
+  .tc-label {{ font-weight: 700; font-size: 14px; }}
+  .tc-count {{ font-size: 22px; font-weight: 800; color: var(--green); }}
+  .tc-sent-bar {{ display: flex; height: 6px; border-radius: 4px; overflow: hidden; background: var(--bg-2); margin-bottom: 6px; }}
+  .ts-neg {{ background: var(--neg); }}
+  .ts-pos {{ background: var(--pos); }}
+  .ts-mix {{ background: var(--mix); }}
+  .tc-meta {{ font-size: 11px; color: var(--muted); margin-bottom: 8px; }}
+  .tc-quote {{ font-size: 12px; color: var(--muted); font-style: italic; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px; }}
+
+  /* Detail panel */
+  #detail-panel {{
+    position: fixed; top: 0; right: 0; width: 620px; max-width: 100vw; height: 100vh;
+    background: var(--bg-2); border-left: 1px solid var(--border);
+    transform: translateX(100%); transition: transform 0.28s cubic-bezier(.4,0,.2,1);
+    overflow-y: auto; z-index: 1000; display: flex; flex-direction: column;
+  }}
+  #detail-panel.open {{ transform: translateX(0); }}
+  #panel-overlay {{
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 999;
+    opacity: 0; pointer-events: none; transition: opacity 0.28s;
+  }}
+  #panel-overlay.open {{ opacity: 1; pointer-events: all; }}
+
+  .panel-head {{
+    position: sticky; top: 0; background: var(--bg-2);
+    border-bottom: 1px solid var(--border); padding: 20px 24px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    flex-shrink: 0; z-index: 1;
+  }}
+  .panel-title {{ font-size: 22px; font-weight: 800; }}
+  .panel-subtitle {{ font-size: 13px; color: var(--muted); margin-top: 4px; }}
+  .panel-close {{
+    background: var(--card); border: 1px solid var(--border); color: var(--text);
+    font-size: 18px; cursor: pointer; border-radius: 8px; padding: 4px 12px;
+    flex-shrink: 0; line-height: 1.6;
+  }}
+  .panel-close:hover {{ border-color: var(--green); color: var(--green); }}
+
+  .panel-body {{ padding: 20px 24px; flex: 1; }}
+  .panel-sent {{
+    display: flex; height: 10px; border-radius: 6px; overflow: hidden;
+    background: var(--bg); margin-bottom: 6px;
+  }}
+  .panel-sent-labels {{ display: flex; gap: 14px; margin-bottom: 20px; }}
+  .psl {{ font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }}
+  .psl-dot {{ width: 9px; height: 9px; border-radius: 50%; }}
+
+  .panel-quotes {{ margin-bottom: 22px; }}
+  .panel-quotes h4 {{ font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }}
+
+  .review-list {{ display: flex; flex-direction: column; gap: 12px; }}
+  .review-list h4 {{ font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }}
+  .review-item {{
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px;
+  }}
+  .review-item-meta {{ display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }}
+  .review-item-text {{ font-size: 13.5px; line-height: 1.6; color: #d4dde0; }}
+  .review-item-text.collapsed {{ display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }}
+  .expand-btn {{ font-size: 12px; color: var(--green); cursor: pointer; background: none; border: none; padding: 4px 0; }}
+  .sent-dot {{ width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }}
+  .sent-dot-negative {{ background: var(--neg); }}
+  .sent-dot-positive {{ background: var(--pos); }}
+  .sent-dot-mixed {{ background: var(--mix); }}
+  .load-more-btn {{
+    width: 100%; margin-top: 16px; padding: 12px; background: var(--card);
+    border: 1px solid var(--border); border-radius: 10px; color: var(--green);
+    font-weight: 600; font-size: 14px; cursor: pointer;
+  }}
+  .load-more-btn:hover {{ border-color: var(--green); }}
+
   @media (max-width: 640px) {{
     .hero h1 {{ font-size: 32px; }}
     .bar-row {{ grid-template-columns: 110px 1fr 36px; }}
     .bar-label {{ font-size: 11px; }}
+    #detail-panel {{ width: 100vw; }}
   }}
 </style>
 </head>
@@ -562,6 +699,14 @@ page = f'''<!DOCTYPE html>
 
   <section>
     <div class="section-head">
+      <h2><span class="dot"></span>Theme Explorer</h2>
+      <p>Every review is tagged with one or more themes. Click any card to see all the reviews behind it — sentiment breakdown, key quotes, and full review text.</p>
+    </div>
+    {theme_cards_html}
+  </section>
+
+  <section>
+    <div class="section-head">
       <h2><span class="dot"></span>The Four Questions</h2>
       <p>The core of the analysis. Each question is answered with quantitative breakdowns from user reviews, the actual voices behind the numbers, and supporting passages pulled from independent research.</p>
     </div>
@@ -603,6 +748,134 @@ page = f'''<!DOCTYPE html>
 <footer>
   Generated from <code>insights_report.json</code> · Spotify Review Analyser · PM Fellowship Project
 </footer>
+
+<!-- Detail panel overlay -->
+<div id="panel-overlay" onclick="closePanel()"></div>
+<div id="detail-panel">
+  <div class="panel-head">
+    <div>
+      <div class="panel-title" id="panel-title"></div>
+      <div class="panel-subtitle" id="panel-subtitle"></div>
+    </div>
+    <button class="panel-close" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-sent" id="panel-sent-bar"></div>
+    <div class="panel-sent-labels" id="panel-sent-labels"></div>
+    <div class="panel-quotes" id="panel-quotes"></div>
+    <div class="review-list" id="panel-reviews"></div>
+    <button class="load-more-btn" id="load-more-btn" onclick="loadMore()" style="display:none">Load more reviews</button>
+  </div>
+</div>
+
+<script>
+const THEME_DATA = {theme_data_json};
+const THEME_LABELS = {json.dumps(THEME_LABELS)};
+const SOURCE_LABELS = {json.dumps(SOURCE_LABELS)};
+
+let _currentReviews = [];
+let _shownCount = 0;
+const PAGE_SIZE = 20;
+
+function showTheme(key) {{
+  const reviews = THEME_DATA[key] || [];
+  const label = THEME_LABELS[key] || key;
+
+  _currentReviews = reviews;
+  _shownCount = 0;
+
+  document.getElementById('panel-title').textContent = label;
+  document.getElementById('panel-subtitle').textContent = reviews.length + ' reviews tagged with this theme';
+
+  // Sentiment bar
+  const counts = {{negative:0, positive:0, mixed:0}};
+  reviews.forEach(r => {{ if (counts[r.sentiment] !== undefined) counts[r.sentiment]++; }});
+  const total = reviews.length || 1;
+  const negP = (counts.negative / total * 100).toFixed(1);
+  const posP = (counts.positive / total * 100).toFixed(1);
+  const mixP = (100 - negP - posP).toFixed(1);
+  document.getElementById('panel-sent-bar').innerHTML =
+    `<div class="ts-neg" style="width:${{negP}}%"></div>` +
+    `<div class="ts-pos" style="width:${{posP}}%"></div>` +
+    `<div class="ts-mix" style="width:${{mixP}}%"></div>`;
+  document.getElementById('panel-sent-labels').innerHTML =
+    `<span class="psl"><span class="psl-dot" style="background:var(--neg)"></span>${{negP}}% negative (${{counts.negative}})</span>` +
+    `<span class="psl"><span class="psl-dot" style="background:var(--pos)"></span>${{posP}}% positive (${{counts.positive}})</span>` +
+    `<span class="psl"><span class="psl-dot" style="background:var(--mix)"></span>${{mixP}}% mixed</span>`;
+
+  // Top quotes
+  const quotes = reviews.filter(r => r.key_quote).slice(0, 5);
+  const qDiv = document.getElementById('panel-quotes');
+  if (quotes.length) {{
+    qDiv.innerHTML = '<h4>Key Quotes</h4><ul class="quote-list">' +
+      quotes.map(r => `<li>${{escHtml(r.key_quote)}}</li>`).join('') + '</ul>';
+  }} else {{
+    qDiv.innerHTML = '';
+  }}
+
+  // Reviews
+  document.getElementById('panel-reviews').innerHTML = '<h4>All Reviews</h4>';
+  appendReviews();
+
+  document.getElementById('detail-panel').classList.add('open');
+  document.getElementById('panel-overlay').classList.add('open');
+  document.getElementById('detail-panel').scrollTop = 0;
+}}
+
+function appendReviews() {{
+  const slice = _currentReviews.slice(_shownCount, _shownCount + PAGE_SIZE);
+  const container = document.getElementById('panel-reviews');
+  slice.forEach((r, i) => {{
+    const idx = _shownCount + i;
+    const srcLabel = SOURCE_LABELS[r.source] || r.source;
+    const sentClass = r.sentiment ? 'sent-dot-' + r.sentiment : '';
+    const authorDate = [r.author !== 'unknown' ? r.author : '', r.date !== 'unknown' ? r.date : ''].filter(Boolean).join(' · ');
+    const itemEl = document.createElement('div');
+    itemEl.className = 'review-item';
+    itemEl.innerHTML =
+      `<div class="review-item-meta">` +
+        `<span class="badge badge-${{r.source}}">${{escHtml(srcLabel)}}</span>` +
+        `<span class="sent-dot ${{sentClass}}" title="${{r.sentiment}}"></span>` +
+        (authorDate ? `<span class="muted" style="font-size:12px">${{escHtml(authorDate)}}</span>` : '') +
+      `</div>` +
+      `<div class="review-item-text collapsed" id="rt-${{idx}}">${{escHtml(r.text)}}</div>` +
+      `<button class="expand-btn" onclick="toggleText(${{idx}})">Show more</button>`;
+    container.appendChild(itemEl);
+  }});
+  _shownCount += slice.length;
+  const btn = document.getElementById('load-more-btn');
+  btn.style.display = _shownCount < _currentReviews.length ? 'block' : 'none';
+}}
+
+function loadMore() {{
+  appendReviews();
+}}
+
+function toggleText(idx) {{
+  const el = document.getElementById('rt-' + idx);
+  const btn = el.nextElementSibling;
+  if (el.classList.contains('collapsed')) {{
+    el.classList.remove('collapsed');
+    btn.textContent = 'Show less';
+  }} else {{
+    el.classList.add('collapsed');
+    btn.textContent = 'Show more';
+  }}
+}}
+
+function closePanel() {{
+  document.getElementById('detail-panel').classList.remove('open');
+  document.getElementById('panel-overlay').classList.remove('open');
+}}
+
+function escHtml(s) {{
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}}
+
+document.addEventListener('keydown', e => {{ if (e.key === 'Escape') closePanel(); }});
+</script>
 
 </body>
 </html>'''
