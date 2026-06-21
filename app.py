@@ -69,16 +69,32 @@ st.markdown("""
 
   /* ── Expander ───────────────────────────────────────────────────────── */
   section[data-testid="stSidebar"] [data-testid="stExpander"] {
-    background: #161d20 !important;
-    border: 1px solid #1e2a2e !important;
+    background: #000 !important;
+    border: 1px solid #1DB954 !important;
     border-radius: 6px !important;
   }
-  section[data-testid="stSidebar"] [data-testid="stExpander"] summary {
-    color: #e8eef0 !important;
-    font-weight: 600;
-  }
-  section[data-testid="stSidebar"] [data-testid="stExpander"] summary:hover {
+  /* Expander header row */
+  section[data-testid="stSidebar"] [data-testid="stExpander"] summary,
+  section[data-testid="stSidebar"] [data-testid="stExpander"] summary p,
+  section[data-testid="stSidebar"] [data-testid="stExpander"] summary span {
+    background: #000 !important;
     color: #1DB954 !important;
+    font-weight: 700 !important;
+  }
+  section[data-testid="stSidebar"] [data-testid="stExpander"] summary:hover,
+  section[data-testid="stSidebar"] [data-testid="stExpander"] summary:hover span {
+    color: #17a349 !important;
+  }
+  /* Expander body */
+  section[data-testid="stSidebar"] [data-testid="stExpander"] > div {
+    background: #000 !important;
+  }
+  section[data-testid="stSidebar"] [data-testid="stExpander"] p,
+  section[data-testid="stSidebar"] [data-testid="stExpander"] span:not(svg *),
+  section[data-testid="stSidebar"] [data-testid="stExpander"] label,
+  section[data-testid="stSidebar"] [data-testid="stExpander"] div {
+    color: #1DB954 !important;
+    background: transparent !important;
   }
   /* Expander chevron */
   section[data-testid="stSidebar"] [data-testid="stExpander"] svg {
