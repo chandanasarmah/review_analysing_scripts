@@ -189,7 +189,7 @@ st.markdown("""
 
 # ── Format detection ──────────────────────────────────────────────────────────
 
-def detect_file_type(content: str) -> tuple[str, str] | tuple[None, str]:
+def detect_file_type(content: str):
     """
     Inspect content and return (file_type, reason).
     file_type is one of: 'apple_ios', 'google_play', 'reddit', or None.
@@ -334,7 +334,6 @@ with st.sidebar:
                 uid = (uf.name, uf.size)
 
                 if uid in st.session_state.processed_uploads:
-                    # Already saved this file — just show quiet confirmation
                     file_type, _ = detect_file_type(
                         uf.getvalue()[:8192].decode("utf-8", errors="replace")
                     )
@@ -350,16 +349,21 @@ with st.sidebar:
                     st.error(
                         f"**{uf.name}** — unrecognised format  \n"
                         f"_{reason}_  \n"
-                        "Check [INPUT_FORMAT.md](INPUT_FORMAT.md) for the expected structure."
+                        "Expected: Apple iOS (numbered reviews + Rating/Reviewer), "
+                        "Google Play (date lines like 'August 29, 2025'), "
+                        "or Reddit (r/spotify headers)."
                     )
                 else:
-                    slot = save_uploaded_file(content_bytes, file_type)
-                    st.success(
-                        f"**{uf.name}** → {TYPE_LABEL[file_type]}  \n"
-                        f"_Detected: {reason}_  \n"
-                        f"Saved as `{slot}`"
-                    )
-                    st.session_state.processed_uploads.add(uid)
+                    try:
+                        slot = save_uploaded_file(content_bytes, file_type)
+                        st.success(
+                            f"**{uf.name}** → {TYPE_LABEL[file_type]}  \n"
+                            f"_Detected: {reason}_  \n"
+                            f"Saved as `input/{slot}`"
+                        )
+                        st.session_state.processed_uploads.add(uid)
+                    except Exception as e:
+                        st.error(f"**{uf.name}** — could not save: {e}")
 
     # Refresh slot status after any saves above
     status = slot_status()
