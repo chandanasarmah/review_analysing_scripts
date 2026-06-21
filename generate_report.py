@@ -17,10 +17,12 @@ from collections import Counter
 
 BASE = Path(__file__).parent
 OUTPUT = BASE / "output"
+INPUT = BASE / "input"
 
 INSIGHTS = OUTPUT / "insights_report.json"
 CATEGORISED = OUTPUT / "reviews_categorised.json"
-RESEARCH = OUTPUT / "research_compiled.json"
+# prefer freshly-fetched copy in output/, fall back to committed copy in input/
+RESEARCH = OUTPUT / "research_compiled.json" if (OUTPUT / "research_compiled.json").exists() else INPUT / "research_compiled.json"
 PARSE_LOG = OUTPUT / "parse_log.txt"
 REPORT_HTML = OUTPUT / "report.html"
 
@@ -592,7 +594,7 @@ page = f'''<!DOCTYPE html>
     position: fixed; top: 0; right: 0; width: 620px; max-width: 100vw; height: 100vh;
     background: var(--bg-2); border-left: 1px solid var(--border);
     transform: translateX(100%); transition: transform 0.28s cubic-bezier(.4,0,.2,1);
-    overflow-y: auto; z-index: 1000; display: flex; flex-direction: column;
+    overflow: hidden; z-index: 1000; display: flex; flex-direction: column;
   }}
   #detail-panel.open {{ transform: translateX(0); }}
   #panel-overlay {{
@@ -602,10 +604,9 @@ page = f'''<!DOCTYPE html>
   #panel-overlay.open {{ opacity: 1; pointer-events: all; }}
 
   .panel-head {{
-    position: sticky; top: 0; background: var(--bg-2);
-    border-bottom: 1px solid var(--border); padding: 20px 24px;
+    background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 20px 24px;
     display: flex; justify-content: space-between; align-items: flex-start;
-    flex-shrink: 0; z-index: 1;
+    flex-shrink: 0;
   }}
   .panel-title {{ font-size: 22px; font-weight: 800; }}
   .panel-subtitle {{ font-size: 13px; color: var(--muted); margin-top: 4px; }}
@@ -616,7 +617,7 @@ page = f'''<!DOCTYPE html>
   }}
   .panel-close:hover {{ border-color: var(--green); color: var(--green); }}
 
-  .panel-body {{ padding: 20px 24px; flex: 1; }}
+  .panel-body {{ padding: 20px 24px; flex: 1; overflow-y: auto; min-height: 0; }}
   .panel-sent {{
     display: flex; height: 10px; border-radius: 6px; overflow: hidden;
     background: var(--bg); margin-bottom: 6px;
@@ -819,12 +820,14 @@ function showTheme(key) {{
 
   document.getElementById('detail-panel').classList.add('open');
   document.getElementById('panel-overlay').classList.add('open');
-  document.getElementById('detail-panel').scrollTop = 0;
+  document.querySelector('.panel-body').scrollTop = 0;
 }}
 
 function appendReviews() {{
   const slice = _currentReviews.slice(_shownCount, _shownCount + PAGE_SIZE);
+  if (!slice.length) return;
   const container = document.getElementById('panel-reviews');
+  let firstNew = null;
   slice.forEach((r, i) => {{
     const idx = _shownCount + i;
     const srcLabel = SOURCE_LABELS[r.source] || r.source;
@@ -841,10 +844,12 @@ function appendReviews() {{
       `<div class="review-item-text collapsed" id="rt-${{idx}}">${{escHtml(r.text)}}</div>` +
       `<button class="expand-btn" onclick="toggleText(${{idx}})">Show more</button>`;
     container.appendChild(itemEl);
+    if (i === 0) firstNew = itemEl;
   }});
   _shownCount += slice.length;
   const btn = document.getElementById('load-more-btn');
   btn.style.display = _shownCount < _currentReviews.length ? 'block' : 'none';
+  if (firstNew) firstNew.scrollIntoView({{ behavior: 'smooth', block: 'nearest' }});
 }}
 
 function loadMore() {{
