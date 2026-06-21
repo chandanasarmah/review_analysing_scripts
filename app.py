@@ -17,6 +17,9 @@ from pathlib import Path
 import streamlit as st
 import streamlit.components.v1 as components
 
+sys.path.insert(0, str(Path(__file__).parent))
+from parse_reviews import validate_inputs
+
 BASE = Path(__file__).parent
 INPUT_DIR = BASE / "input"
 OUTPUT_DIR = BASE / "output"
@@ -68,25 +71,54 @@ with st.sidebar:
     st.markdown("## 🎵 Spotify Review Analyser")
     st.markdown("---")
 
+    # Validate input files and surface any issues
+    try:
+        issues = validate_inputs()
+        errors   = [i for i in issues if i[0] == "error"]
+        warnings = [i for i in issues if i[0] == "warning"]
+    except Exception:
+        errors, warnings = [], []
+
+    if errors:
+        st.markdown("**Input file errors**")
+        for _, fname, msg in errors:
+            st.error(f"**{fname}**\n{msg}")
+        st.caption("See [INPUT_FORMAT.md](INPUT_FORMAT.md) for the expected format.")
+    elif warnings:
+        for _, fname, msg in warnings:
+            st.warning(f"**{fname}**\n{msg}")
+
     fetch = st.checkbox("Fetch research sources", value=True,
                         help="Re-download research articles (needs internet). Uncheck to reuse cached data.")
 
-    if st.button("▶  Run Full Workflow", use_container_width=True, type="primary"):
+    run_disabled = bool(errors)
+    if st.button("▶  Run Full Workflow", use_container_width=True, type="primary",
+                 disabled=run_disabled,
+                 help="Fix the input file errors above before running." if run_disabled else ""):
         ok = run_workflow(fetch)
         if ok:
             st.success("Done! Report updated.")
             st.rerun()
 
     st.markdown("---")
-    st.markdown("**Data sources**")
-    for label, fname in [
+    st.markdown("**Input files**")
+    input_files = [
         ("Apple iOS reviews",     "apple ios.txt"),
         ("Google Play (batch 1)", "google play store review.txt"),
         ("Google Play (batch 2)", "google playstore review 2.txt"),
         ("Reddit posts",          "reddit.txt"),
-    ]:
-        exists = (INPUT_DIR / fname).exists()
-        icon = "🟢" if exists else "🔴"
+    ]
+    error_files = {fname for _, fname, _ in errors}
+    warn_files  = {fname for _, fname, _ in warnings}
+    for label, fname in input_files:
+        if fname in error_files:
+            icon = "🔴"
+        elif fname in warn_files:
+            icon = "🟡"
+        elif (INPUT_DIR / fname).exists():
+            icon = "🟢"
+        else:
+            icon = "🔴"
         st.markdown(f"{icon} {label}")
 
     st.markdown("---")
