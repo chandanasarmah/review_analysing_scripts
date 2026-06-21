@@ -46,14 +46,18 @@ st.markdown("""
   .stApp           { background: #0b0e0f; }
   .block-container { padding-top: 1rem !important; }
 
-  /* ── Sidebar shell ──────────────────────────────────────────────────── */
+  /* ── Sidebar — always visible ───────────────────────────────────────── */
   section[data-testid="stSidebar"] {
     background: #0f1416 !important;
-    border-right: 1px solid #1e2a2e;
+    border-right: 1px solid #1e2a2e !important;
     min-width: 280px !important;
+    transform: none !important;
+    display: block !important;
+    visibility: visible !important;
   }
-  /* Hide only the collapse button INSIDE the sidebar (not the reopen arrow) */
-  [data-testid="stSidebarCollapseButton"] { display: none !important; }
+  /* Hide both collapse buttons so sidebar can never be dismissed */
+  [data-testid="stSidebarCollapseButton"],
+  [data-testid="collapsedControl"] { display: none !important; }
   section[data-testid="stSidebar"],
   section[data-testid="stSidebar"] p,
   section[data-testid="stSidebar"] span,
@@ -330,10 +334,6 @@ with st.sidebar:
         n = status[type_key]
         icon = "🟢" if n > 0 else "🔴"
         st.markdown(f"{icon} {label}: **{n} file{'s' if n != 1 else ''}**")
-
-    for lvl, fname, msg in issues:
-        if lvl == "warning":
-            st.warning(f"**{fname}**: {msg}")
 
     for lvl, fname, msg in issues:
         if lvl == "warning":
