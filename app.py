@@ -40,12 +40,133 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-  #MainMenu, header, footer {visibility: hidden;}
-  [data-testid="stToolbar"] {display: none;}
-  .stApp {background: #0b0e0f;}
-  .block-container {padding-top: 1rem !important;}
-  section[data-testid="stSidebar"] {background: #111518;}
-  section[data-testid="stSidebar"] * {color: #e8eef0 !important;}
+  /* ── Global chrome ──────────────────────────────────────────────────── */
+  #MainMenu, header, footer { visibility: hidden; }
+  [data-testid="stToolbar"]  { display: none; }
+  .stApp          { background: #0b0e0f; }
+  .block-container { padding-top: 1rem !important; }
+
+  /* ── Sidebar shell ──────────────────────────────────────────────────── */
+  section[data-testid="stSidebar"] {
+    background: #0f1416 !important;
+    border-right: 1px solid #1e2a2e;
+  }
+  /* Base text colour for everything in the sidebar */
+  section[data-testid="stSidebar"],
+  section[data-testid="stSidebar"] p,
+  section[data-testid="stSidebar"] span,
+  section[data-testid="stSidebar"] label,
+  section[data-testid="stSidebar"] div,
+  section[data-testid="stSidebar"] small {
+    color: #c8d8dc !important;
+  }
+  section[data-testid="stSidebar"] h1,
+  section[data-testid="stSidebar"] h2,
+  section[data-testid="stSidebar"] h3,
+  section[data-testid="stSidebar"] strong {
+    color: #e8eef0 !important;
+  }
+
+  /* ── Expander ───────────────────────────────────────────────────────── */
+  section[data-testid="stSidebar"] [data-testid="stExpander"] {
+    background: #161d20 !important;
+    border: 1px solid #1e2a2e !important;
+    border-radius: 6px !important;
+  }
+  section[data-testid="stSidebar"] [data-testid="stExpander"] summary {
+    color: #e8eef0 !important;
+    font-weight: 600;
+  }
+  section[data-testid="stSidebar"] [data-testid="stExpander"] summary:hover {
+    color: #1DB954 !important;
+  }
+  /* Expander chevron */
+  section[data-testid="stSidebar"] [data-testid="stExpander"] svg {
+    fill: #1DB954 !important;
+    stroke: #1DB954 !important;
+  }
+
+  /* ── File uploader drop zone ────────────────────────────────────────── */
+  section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] {
+    background: #0f1416 !important;
+    border: 2px dashed #1e3a2a !important;
+    border-radius: 8px !important;
+  }
+  section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"]:hover {
+    border-color: #1DB954 !important;
+    background: #111e16 !important;
+  }
+  section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] *,
+  section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] * {
+    color: #8a979d !important;
+  }
+  /* The "Browse files" / "Upload" button inside the uploader */
+  section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button,
+  section[data-testid="stSidebar"] [data-testid="baseButton-secondary"] {
+    background: #1a2a1e !important;
+    color: #1DB954 !important;
+    border: 1px solid #1DB954 !important;
+    border-radius: 4px !important;
+  }
+  section[data-testid="stSidebar"] [data-testid="baseButton-secondary"]:hover {
+    background: #1DB954 !important;
+    color: #000 !important;
+  }
+  /* File type badge (.txt pill) */
+  section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] small,
+  section[data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] small {
+    color: #4a6670 !important;
+  }
+
+  /* ── Primary run button ─────────────────────────────────────────────── */
+  section[data-testid="stSidebar"] [data-testid="baseButton-primary"] {
+    background: #1DB954 !important;
+    color: #000 !important;
+    border: none !important;
+    font-weight: 700 !important;
+    border-radius: 20px !important;
+  }
+  section[data-testid="stSidebar"] [data-testid="baseButton-primary"]:hover {
+    background: #17a349 !important;
+  }
+  section[data-testid="stSidebar"] [data-testid="baseButton-primary"]:disabled {
+    background: #1e2a2e !important;
+    color: #4a6670 !important;
+    cursor: not-allowed !important;
+  }
+
+  /* ── Checkbox ───────────────────────────────────────────────────────── */
+  section[data-testid="stSidebar"] [data-testid="stCheckbox"] span {
+    color: #c8d8dc !important;
+  }
+  section[data-testid="stSidebar"] [data-testid="stCheckbox"] input:checked + div {
+    background: #1DB954 !important;
+    border-color: #1DB954 !important;
+  }
+
+  /* ── Alerts inside sidebar ──────────────────────────────────────────── */
+  section[data-testid="stSidebar"] [data-testid="stAlert"] {
+    border-radius: 6px !important;
+  }
+  section[data-testid="stSidebar"] [data-baseweb="notification"][kind="positive"] {
+    background: #0d2116 !important;
+    border-left: 3px solid #1DB954 !important;
+    color: #1DB954 !important;
+  }
+  section[data-testid="stSidebar"] [data-baseweb="notification"][kind="warning"] {
+    background: #1f1800 !important;
+    border-left: 3px solid #f0a500 !important;
+  }
+  section[data-testid="stSidebar"] [data-baseweb="notification"][kind="negative"] {
+    background: #200d0d !important;
+    border-left: 3px solid #e05252 !important;
+  }
+
+  /* ── Horizontal divider ─────────────────────────────────────────────── */
+  section[data-testid="stSidebar"] hr {
+    border-color: #1e2a2e !important;
+    margin: 0.6rem 0 !important;
+  }
 </style>
 """, unsafe_allow_html=True)
 
