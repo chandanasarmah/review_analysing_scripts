@@ -230,6 +230,30 @@ def parse_google_play(filepath, source_label="google_play"):
         log(f"[google_play] File not found: {filepath}")
         return records
 
+    # Some exports separate fields within a review with multiple blank lines,
+    # and use even more blank lines between reviews.
+    # Detect the two cluster sizes and split only on the larger (review boundary).
+    newline_runs = re.findall(r"\n{3,}", text)
+    if newline_runs:
+        from collections import Counter
+        run_counts = Counter(len(r) for r in newline_runs)
+        sizes = sorted(run_counts)
+        if len(sizes) >= 2:
+            # Two distinct gap sizes: smaller = field separator, larger = review boundary.
+            # Split threshold = midpoint between the two smallest distinct sizes.
+            threshold = (sizes[0] + sizes[-1]) // 2 + 1
+        else:
+            # Only one run size — treat 4+ blank lines as review boundary.
+            threshold = sizes[0] if sizes[0] >= 4 else 4
+        if threshold >= 3:
+            raw_reviews = re.split(r"\n{" + str(threshold) + r",}", text)
+            normalised = []
+            for rv in raw_reviews:
+                rv = re.sub(r"\n{2,}", "\n", rv).strip()
+                if rv:
+                    normalised.append(rv)
+            text = "\n\n".join(normalised)
+
     seen = set()
     blocks = re.split(r"\n\s*\n", text)
 

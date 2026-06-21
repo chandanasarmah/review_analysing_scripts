@@ -1,0 +1,329 @@
+{
+  "metadata": {
+    "fetched_at": "2026-06-21T18:37:04.378524",
+    "total_attempted": 23,
+    "successful": 23,
+    "failed": 0,
+    "source": "input/RESEARCH_ARTICLES_FULL.txt"
+  },
+  "articles": [
+    {
+      "id": "medium_001",
+      "title": "How to Discover New Music on Spotify",
+      "url": "https://medium.com/@stephaniesjkim/how-to-discover-new-music-on-spotify-72bb449fb50",
+      "source_type": "medium",
+      "topics": [
+        "discovery",
+        "playlists",
+        "features"
+      ],
+      "preview_text": "How to Discover New Music on Spotify | by Stephanie Kim | MediumSitemapOpen in appSign upSign inMedium LogoGet appWriteSearchSign upSign inHow to Discover New Music on SpotifyStephanie Kim6 min read·Dec 29, 2015--ListenSharePress enter or click to view image in full sizeThe number one music-related question that I get from my friends is, “How do you discover new music?” So, in response to that, and given my original mission for STÉLOMANE — to help the world discover new sounds — I decided to write this blog post. One of my main vehicles to finding new music is the music steaming service Spotify. Here are some tips and a quick guide (with GIFs!) on the features I use on Spotify to discover new music.PlaylistsDiscover WeeklyThe Discover Weekly playlist is Spotify’s genius flagship feature: a playlist designed just for you. It updates every Monday, with 30 new tracks based on your listening history. To make things even sweeter, Spotify customizes the album cover with your Facebook profile picture. You can find this playlist in the main navigation under ‘Browse.’ Click the ‘Discover’ tab, and you should see the playlist under ‘Top Recommendations for You.’Press enter or click to view image in full sizeUsing BrowseThe ‘Browse’ tab under Spotify’s main navigation offers a lot more than just the Discover Weeklyplaylist. I love this section because its range of choices and unique playlist titles.There are 5 tabs in ‘Browse’:Overview: Includes relevant playlists to date, and quick access to ‘Genres & Moods.’Charts: See the top charts, by country.Genres & Moods: As of now, there 34 of them ranging from ‘Party’ to ‘Focus’ to ‘Travel.’New Releases: A continuously updated list of Spotify’s newest albums.Discover: See your ‘Top Recommendations for You,’ ‘New Releases for You,’ and additional artist and album suggestions based on your listening history.‘Browse’ will likely be your central spot for music discovery. Although it is overwhelmingly packed with options, you’re bound to",
+      "author": "Stephanie Kim",
+      "date": "2015-12-29"
+    },
+    {
+      "id": "medium_002",
+      "title": "The Spotify Discover Weekly and Release Radar Algorithm Explained",
+      "url": "https://roadtripsandplaylists.medium.com/the-spotify-discover-weekly-and-release-radar-algorithm-explained-32a611df77fc",
+      "source_type": "medium",
+      "topics": [
+        "algorithm",
+        "discover_weekly",
+        "release_radar"
+      ],
+      "preview_text": "The Spotify Discover Weekly and Release Radar Algorithm Explained | by Roadtrips and Playlists | MediumSitemapOpen in appSign upSign inMedium LogoGet appWriteSearchSign upSign inThe Spotify Discover Weekly and Release Radar Algorithm ExplainedRoadtrips and Playlists7 min read·Jul 26, 2021--ListenSharePress enter or click to view image in full sizeIn a world full of Apple Musics, Pandoras, and Soundclouds, one app arguably reigns far above the rest: Spotify. Any true music guru knows that Spotify is the best streaming platform for finding new music. A large part of the company’s success can be attributed to their incredible algorithmic playlists Discover Weekly and Release Radar. Both features are automatically created for each user by Spotify’s own software, providing you new music every week that is perfectly tailored to your listening style. But how exactly does this algorithm know just the right tune to play? Well, we’re here to explain the way Discover Weekly and Release Radar filter music so that you can get the most out of your next Spotify listening experience.WHAT IS AN ALGORITHMIC PLAYLIST?To briefly summarize, algorithmic playlists are music devices that track a wide range of listening habits to compile the songs that are best fit for you. These habits can include artists/albums/tracks a user likes, shares, saves to their playlists, and even skips.Spotify’s algorithm is an AI system known as BART. Basically, BART’s job is to keep listeners listening. And it does so by playing and suggesting songs it knows the user is familiar with while dropping in some fresh tracks it thinks they might like, but most importantly, haven’t heard before. This method keeps listeners connected to the platform, listening to music they like but not getting annoyed.The BART algorithm also looks at the listening habits of other similar users to provide song recommendations. For example, let’s assume User A has similar listening habits (artists, songs, times of listening, etc) to U",
+      "author": "Roadtrips and Playlists",
+      "date": "2021-07-26"
+    },
+    {
+      "id": "medium_003",
+      "title": "The Strange Magic of Spotify's Discover Weekly",
+      "url": "https://medium.com/swlh/the-strange-magic-of-spotifys-discover-weekly-40645d9b8dba",
+      "source_type": "medium",
+      "topics": [
+        "algorithm",
+        "discover_weekly",
+        "personalization"
+      ],
+      "preview_text": "The Strange Magic of Spotify’s “Discover Weekly” | by André Klein | The Startup | MediumSitemapOpen in appSign upSign inMedium LogoGet appWriteSearchSign upSign inThe Startup·Get smarter at building your thing. Follow to join The Startup’s +8 million monthly readers & +772K followers.The Strange Magic of Spotify’s “Discover Weekly”André Klein4 min read·Nov 1, 2019--ListenShareI for one Welcome Our Algorithmic Overlords …Press enter or click to view image in full sizeCassette images via magnetofon.de, handwriting, automatically generated by neural network by cs.toronto.eduNot too long ago, before image macros and reaction videos roamed the planet, human beings created mix-tapes to express complicated feelings or share their favorite songs with family and friends.These custom compilations of songs were recorded on primitive storage media called “cassettes”, small plastic shells filled with two spools of magnetic thread constantly on the verge of getting entangled and jamming the playback device, in which case the cassette had to be carefully extracted from the mechanism, lengths of painstakingly prepared music spilling onto the floor like ugly brown tagliatelle.via giphyNowadays our music lives in the cloud, gazillions of songs stored in ever-expanding rows within server farms across the world, managed and maintained by bots and over-caffeinated system administrators. We have access to almost every song ever written in human history and the only barrier between us and the totality of our sonic heritage is in our minds, i.e. we can only type things into the search field we’re already aware of.This is why at the center of each streaming service like Spotify or Google Music there is a “recommendation engine”, a secret soup of algorithms constantly analyzing our listening habits and suggesting related artists, albums and playlists.Before all of this, we used to discover music via the radio, television and most importantly, through our friends with whom we exchanged batter",
+      "author": "André Klein",
+      "date": "2019-11-01"
+    },
+    {
+      "id": "medium_004",
+      "title": "I Tracked Spotify for 14 Days: Here's Why You Can't Discover New Music",
+      "url": "https://medium.com/@nimbalkaryashraj53/i-tracked-spotify-for-14-days-heres-why-you-can-t-discover-new-music-cde69cad9cf8",
+      "source_type": "medium",
+      "topics": [
+        "discovery_problems",
+        "algorithm",
+        "user_experience"
+      ],
+      "preview_text": "I Tracked Spotify for 14 Days — Here’s Why You Can’t Discover New Music | by Nimbalkaryashraj | MediumSitemapOpen in appSign upSign inMedium LogoGet appWriteSearchSign upSign inI Tracked Spotify for 14 Days — Here’s Why You Can’t Discover New MusicNimbalkaryashraj15 min read·Feb 5, 2026--ListenShare(This analysis represents my personal observations and hypotheses as a user and aspiring analyst, not verified internal knowledge of Spotify’s systems. I manually tracked 13 exploration sessions over 14 days — a limited sample that should be interpreted directionally rather than as definitive proof.I have immense respect for Spotify’s engineering team and the complexity of building recommendation systems at scale. This work is intended as a learning exercise in product analysis and hypothesis formation, not as criticism of their technical decisions. Any errors in interpretation or methodology are entirely my own.The technical mappings (RTSP, collaborative filtering, bandits) are educated guesses based on published research and observed patterns, not confirmed architecture details.)I spent two weeks tracking my Spotify data in an Excel sheet to answer one question: Why does the world’s best algorithm felt like a loop to me? We’ve all been there when you try to find new music, but Spotify just pulls you back to what you played yesterday.As an aspiring analyst, I wanted to prove that this loop is a measurable pattern. By logging every song and skip, I found the exact moment the algorithm gives up on your new taste to play it safe. Using AI to map my data to Spotify’s actual systems, I realized it’s actually a business choice.Here is the breakdown of the patterns I found and how we can fix them.The Moment the Algorithm Felt Wrong:When I pressed play on an artist I have never heard before, the song went a little fresh, curious and little weird. Then it played the second song from the artist but then spotify did something I didn’t expect… Three songs later it played the same tr",
+      "author": "Nimbal Kary Ashraj",
+      "date": "unknown"
+    },
+    {
+      "id": "medium_007",
+      "title": "The Shuffle Showdown: Why Spotify and YouTube Music Play Your Songs the Way They Do",
+      "url": "https://medium.com/@shivachandra9490/the-shuffle-showdown-why-spotify-and-youtube-music-play-your-songs-the-way-they-do-9afaa67758f8",
+      "source_type": "medium",
+      "topics": [
+        "shuffle",
+        "algorithm",
+        "randomness"
+      ],
+      "preview_text": "The Shuffle Showdown: Why Spotify and YouTube Music Play Your Songs The Way They Do | by Shivachandra | MediumSitemapOpen in appSign upSign inMedium LogoGet appWriteSearchSign upSign inThe Shuffle Showdown: Why Spotify and YouTube Music Play Your Songs The Way They DoShivachandra5 min read·Jul 16, 2025--2ListenSharePress enter or click to view image in full sizeLike many people out here, even I am a major music fan and do often spend time crafting playlists and giving a different character to each of them. Spotify, being a haven for people to create their own playlists, I have been an avid user of it for more than 4 years. So when hearing them, I used to initially listen to them in the same order as I had added them, but then it became predictable, and that took out the surprise factor on what plays next. So I have started using the shuffle option in my playlist with more than 1000 songs, but soon enough, even the shuffle pattern had gotten predictable, but that shouldn’t be the case, right? Like, I have been hearing the same 200–250 songs on repeat.I had a YouTube Premium for a year, but wasn’t that big a fan of yt music as it is quite harder to make playlists, but then I imported my Spotify playlist into yt music and the shuffle option made me hear songs which I almost forgot, like it was so perfect and that felt good. So I had the question about what might be the difference btw them and these are my observations.Your experience isn’t just in your head — it’s the result of two completely different philosophies on what the word “shuffle” should even mean. Let’s pull back the curtain, starting with the platform you know best.The Core Problem: Our Brains Think Randomness Is BrokenFirst, we need to talk about a weird human quirk: we’re terrible at spotting what’s truly random. Imagine you flip a coin six times. Which of these looks more random?Sequence A: Heads, Tails, Heads, Heads, Tails, TailsSequence B: Heads, Heads, Heads, Tails, Tails, TailsYou probably picked A.",
+      "author": "Shivachandra",
+      "date": "2025-07-16"
+    },
+    {
+      "id": "medium_008",
+      "title": "Apple Music or Spotify: What Streaming Music Platform is Better?",
+      "url": "https://medium.com/@KobeOnye/apple-music-or-spotify-what-streaming-music-platform-is-better-41f386ca0dcd",
+      "source_type": "medium",
+      "topics": [
+        "comparison",
+        "shuffle",
+        "recommendations",
+        "ui"
+      ],
+      "preview_text": "Apple Music or Spotify? What streaming music platform is better? | by Kobe Onye | MediumSitemapOpen in appSign upSign inMedium LogoGet appWriteSearchSign upSign inApple Music or Spotify? What streaming music platform is better?Kobe Onye5 min read·Jan 1, 2024--2ListenSharePress enter or click to view image in full sizeCourtesy: FoundryI’m known as the person who subscribes to everything. Netflix? Got it. Hulu? Bundled with Disney+. Max? Only ad-free for me. And on and on. Music streaming, however, was one of my first subscriptions and is the one thing I think I’d always be subscribed to. I’ve bounced between Apple Music and Spotify for the past few years, finding a few things I prefer from each (and keeping my two main mood playlists up to date). However, I feel that it’s time to stick with one platform and one platform only. I’ll lay out what I like and dislike about each service, as well as which one I’m sticking to and what made that decision even easier.Apple MusicI decided to give Apple Music another try after mostly using Spotify over the past year. Of course, when I moved back to it after over six months of being unsubscribed, I lost all of my playlists. Moving them back was a headache, and when I used a playlist moving service at least a few songs were moved incorrectly (and, in more than one case, were replaced with their non-explicit versions). After I got things settled though, here’s what I liked and disliked:What I liked:The interface is less cluttered. As compared to Spotify’s home page on mobile, Apple Music’s main pages are more polished and not as busy. There also aren’t annoying pop-ups that are often just advertisements for random artists.The sound quality is much better. Although it is subtle, it’s noticeable. Spotify has teased a higher sound quality tier for years, but as of the original publishing of this article it hasn’t been formally announced and is likely to cost more than regular premium.It has multiple radio stations and a larger array o",
+      "author": "Kobe Onye",
+      "date": "2024-01-01"
+    },
+    {
+      "id": "medium_009",
+      "title": "7 Ways How Spotify's Algorithm Delivers Personalized Music Recommendations",
+      "url": "https://keentolearn.medium.com/7-ways-how-spotifys-algorithm-delivers-personalized-music-recommendations-ebfbc934d90f",
+      "source_type": "medium",
+      "topics": [
+        "algorithm",
+        "personalization",
+        "recommendations"
+      ],
+      "preview_text": "7 ways How Spotify’s Algorithm Delivers Personalized Music Recommendations | by Tejashree Salvi | MediumSitemapOpen in appSign upSign inMedium LogoGet appWriteSearchSign upSign in7 ways How Spotify’s Algorithm Delivers Personalized Music RecommendationsTejashree Salvi3 min read·Feb 19, 2023--ListenShareAs one of the most popular music streaming platforms in the world, how does Spotify’s algorithm work, and how does it deliver such accurate recommendations? In this article, we’ll explore the inner workings of Spotify’s algorithm and uncover the secrets behind its personalized music recommendations. https://www.spotify.com/Press enter or click to view image in full sizeIncorporating Natural Language ProcessingSpotify’s algorithm uses NLP to analyze the user’s playlist and song names, as well as the song’s lyrics and metadata. This analysis helps the algorithm determine the user’s mood, emotions, and even the context in which they’re listening to music.Using Audio AnalysisSpotify’s algorithm also uses audio analysis to develop its recommendations. The platform uses a sophisticated tool called Echo Nest, which analyzes the music’s acoustic properties, such as tempo, key, and mode.By analyzing the music’s acoustic properties, Spotify can identify songs that are similar in sound or style, which it can then recommend to the user. The audio analysis also helps the algorithm identify new artists or songs that the user may enjoy based on their existing listening habits.Analyzing User BehaviorThe first step in Spotify's recommendation algorithm is analyzing user behavior. Spotify tracks the user’s listening history, playlists, and song preferences, which it uses to develop a unique user profile. This profile includes information about the user’s favorite genres, artists, and even their preferred time of day for listening to music.The algorithm also takes into account the user’s location, device type, and listening activity, such as skipping tracks or replaying songs. This data",
+      "author": "Keen to Learn",
+      "date": "unknown"
+    },
+    {
+      "id": "medium_010",
+      "title": "UX Case Study: Social and Review Function for Spotify",
+      "url": "https://medium.com/@xxu523/ux-case-study-social-and-review-function-for-spotify-908f5986c43c",
+      "source_type": "medium",
+      "topics": [
+        "ux",
+        "social",
+        "community",
+        "reviews"
+      ],
+      "preview_text": "UX Case Study — Social and Review Function for Spotify | by Xxu | MediumSitemapOpen in appSign upSign inMedium LogoGet appWriteSearchSign upSign inUX Case Study — Social and Review Function for SpotifyXxu5 min read·Dec 16, 2025--ListenShareContributors: Nadia Mohd Said, Camber Walvoort, Elliot Wilcox, and Xiaotong XuPress enter or click to view image in full sizeOur TeamBackgroundOur project originated from a usability issue identified by one of our team members while using Spotify playlists. Specifically, the lack of a “rewind” or easy backtracking function made it difficult for users to quickly return to a previous song and identify its title. This pain point revealed a broader issue: Spotify’s in-app music sharing and social interaction experience felt limited and unintuitive.Although Spotify later released a related feature, our initial research highlighted an unmet need at the time. Based on this insight, our team decided to redesign Spotify’s playlist experience with a stronger emphasis on social interaction and music review, aiming to support how users discover, discuss, and share music within the platform.Disclaimer and Team CollaborationThis project was completed as a group of four. All team members contributed throughout the entire design process, including idea generation, user interviews, storyboarding, and prototyping. Decisions regarding the final interface concepts were made collaboratively before moving into Figma-based prototyping.My RoleMy primary responsibility was designing the Message Page, as well as connecting the interactive messaging experience to the Review Page and the keyboard interactions used in the final prototype. I also contributed to research synthesis, ideation discussions, and overall design critiques.Design Process OverviewOur team followed a Design Thinking framework, which included idea generation, sketching and critique, visual design exploration, paper prototyping, and digital wireframing.Ideas were developed through:Group di",
+      "author": "Xu",
+      "date": "unknown"
+    },
+    {
+      "id": "medium_011",
+      "title": "Beyond Algorithms: A Human-Centric Concept for Spotify's Music Discovery",
+      "url": "https://medium.com/@osmanwarsi/beyond-algorithms-a-human-centric-concept-for-spotifys-music-discovery-9ffbcf5f07d7",
+      "source_type": "medium",
+      "topics": [
+        "discovery",
+        "human_centered_design",
+        "algorithm_critique"
+      ],
+      "preview_text": "Beyond Algorithms: A Human-Centric Approach to Spotify’s Discovery | by Osman Warsi | MediumSitemapOpen in appSign upSign inMedium LogoGet appWriteSearchSign upSign inBeyond Algorithms: A Human-Centric Approach to Spotify’s DiscoveryOsman Warsi4 min read·Aug 30, 2023--ListenShareA Solution to “Music Suggestions?”Press enter or click to view image in full sizeProblemOkay so, to be fair, it’s not really a “problem”. It’s more an excuse for me to find something to fix…Music discovery is incredibly difficult, or so it has been for the longest time. With advanced AI and suggestion algorithms, it’s somewhat getting better. What I define as the “problem” here is that they are too reliant on algorithms. I don’t always want a code telling me what I should be listening to.I thought of how we can use more human ways to discover music. Well the most obvious is simply talking and asking people what they’re listening to. So this social aspect is what is the basis for this. Say you are visiting a new town or a place where you don’t know anyone, and want to discover what people around you are consuming. Location-based music discovery is the solution. Maybe.SoundMap: Your Global Music CompassI named this feature SoundMap, it sounds cool and also emphasizes the key element: The map. Following are some UX demos I built out on Figma:Press enter or click to view image in full sizeUsers can find Music playing(ed) around them by simply dragging around the map, and after clicking on a track they are shown some related discovery dataPress enter or click to view image in full sizeUsers can also look at their profile and analyze their usage and find more artistsSoundMap merges music and location. It’s quite simple. The idea is to allow existing Spotify users to explore local sounds and have an alternate, no algorithmic exposure to different to tracks and artists.The users can of course decide if they want to expose their music by “checking-in” on a map. I think it’s fair to say, many people l",
+      "author": "Osman Warsi",
+      "date": "unknown"
+    },
+    {
+      "id": "substack_001",
+      "title": "Explaining Spotify's Discovery Mode",
+      "url": "https://musichelpdesk.substack.com/p/explaining-spotifys-discovery-mode",
+      "source_type": "substack",
+      "topics": [
+        "discovery_mode",
+        "features",
+        "recommendations"
+      ],
+      "preview_text": "Explaining Spotify's “Discovery Mode” 💡 SubscribeSign inExplaining Spotify's “Discovery Mode” 💡Spotify's discovery mode, some love it, some hate it.@BRANDONVHIXONDec 25, 2022ShareThis Week On The DeskSpotify’s “Discovery Mode” explained 📰 Signings ✍🏾 - G-EazyCreative($) of the week 👩🏽‍🎨 - dickbyairLinks 🔗 Happy Holiday 🎄🎅🏾Spotify’s “Discovery Mode” explained As it stands, discovery mode is still in beta and being tested by a small group of artists and distributors. Word on the ground is that distributors and teams like EMPIRE, Crush Management, and Tunecore love the idea, while the labels (Sony, Warner, and UMG) seem to hate it.Labels argue discovery mode will create a race to the bottom and dillute their streamshare. In response, they’ve been quick to label it “payola” even though they’re the one’s who covertly engage in the practice on a regular basis.Distributors counter, arguing it levels the playing field.I’ve included a semi-accurate list of publicly available beta-testers for discovery mode below:ODIE (Empire)mehro (Independent)Natalie Perez (UMG + Warner Music Chile)Terrace Martin (Empire / Crush Management)You’ll notice only one major record label (which was either UMG or Warner) opted to test “Discovery Mode” and be publicly associated with the early case studies being touted on the Spotify For Artist homepage.What’s been unclear about “Discovery Mode” is how and where they’re algorithmically recommending an artists’s song or wider album.The answer comes down to Spotify radio + autoplay.The best way to explain these concepts is through example:Assume you’re listening to “Ty Dolla Sign Radio” on Spotify through the mobile app. Also assume that you’re an independent artist that has released a single that sounds similar to something Ty Dolla Sign would release on Atlantic Records. With discovery mode on toggled on, Spotify will recommend your independent artist single next to artists inside of Ty Dolla Sign’s algorithmically generated radio station.Based on a",
+      "author": "Music Help Desk",
+      "date": "unknown"
+    },
+    {
+      "id": "reddit_001",
+      "title": "Smart Shuffle is the worst thing in existence",
+      "url": "https://www.reddit.com/r/truespotify/comments/1ma2nk9/smart_shuffle_is_the_worst_thing_in_existence/",
+      "source_type": "reddit",
+      "topics": [
+        "shuffle",
+        "user_complaints",
+        "discovery"
+      ],
+      "preview_text": "Reddit - Please wait for verification",
+      "author": "Unknown",
+      "subreddit": "r/truespotify"
+    },
+    {
+      "id": "reddit_002",
+      "title": "Smart Shuffle is one of the worst things Spotify ever added",
+      "url": "https://www.reddit.com/r/spotify/comments/1ef8pdf/smart_shuffle_is_one_of_the_worst_things_spotify/",
+      "source_type": "reddit",
+      "topics": [
+        "shuffle",
+        "user_complaints"
+      ],
+      "preview_text": "Reddit - Please wait for verification",
+      "author": "Unknown",
+      "subreddit": "r/spotify"
+    },
+    {
+      "id": "reddit_003",
+      "title": "Why is Spotify Smart Shuffle so Bad?",
+      "url": "https://www.reddit.com/r/TooAfraidToAsk/comments/1e2ra32/why_is_spotify_smart_shuffle_so_bad/",
+      "source_type": "reddit",
+      "topics": [
+        "shuffle",
+        "user_experience"
+      ],
+      "preview_text": "Reddit - Please wait for verification",
+      "author": "Unknown",
+      "subreddit": "r/TooAfraidToAsk"
+    },
+    {
+      "id": "reddit_004",
+      "title": "Spotify DJ kinda sucks",
+      "url": "https://www.reddit.com/r/truespotify/comments/1r6f21d/spotify_dj_kinda_sucks/",
+      "source_type": "reddit",
+      "topics": [
+        "ai_dj",
+        "features",
+        "discovery"
+      ],
+      "preview_text": "Reddit - Please wait for verification",
+      "author": "Unknown",
+      "subreddit": "r/truespotify"
+    },
+    {
+      "id": "reddit_005",
+      "title": "What do you think about Spotify AI DJ?",
+      "url": "https://www.reddit.com/r/Music/comments/1bfelax/what_do_you_think_about_spotify_ai_dj/",
+      "source_type": "reddit",
+      "topics": [
+        "ai_dj",
+        "user_opinions"
+      ],
+      "preview_text": "Reddit - Please wait for verification",
+      "author": "Unknown",
+      "subreddit": "r/Music"
+    },
+    {
+      "id": "reddit_006",
+      "title": "Prompted playlists are amazing",
+      "url": "https://www.reddit.com/r/spotify/comments/1qp4c9r/prompted_playlists_are_amazing/",
+      "source_type": "reddit",
+      "topics": [
+        "ai_playlists",
+        "positive_feedback"
+      ],
+      "preview_text": "Reddit - Please wait for verification",
+      "author": "Unknown",
+      "subreddit": "r/spotify"
+    },
+    {
+      "id": "reddit_007",
+      "title": "Daylist is everything Spotify should've been",
+      "url": "https://www.reddit.com/r/truespotify/comments/16u8ula/daylist_is_everything_spotify_shouldve_been/",
+      "source_type": "reddit",
+      "topics": [
+        "daylist",
+        "discovery",
+        "personalization"
+      ],
+      "preview_text": "Reddit - Please wait for verification",
+      "author": "Unknown",
+      "subreddit": "r/truespotify"
+    },
+    {
+      "id": "reddit_008",
+      "title": "I hate the Spotify algorithm",
+      "url": "https://www.reddit.com/r/truespotify/comments/1j5tkbb/i_hate_the_spotify_algorithm/",
+      "source_type": "reddit",
+      "topics": [
+        "algorithm",
+        "autoplay",
+        "user_frustration"
+      ],
+      "preview_text": "Reddit - Please wait for verification",
+      "author": "Unknown",
+      "subreddit": "r/truespotify"
+    },
+    {
+      "id": "reddit_009",
+      "title": "Spotify Blend Playlists Just Aren't Good",
+      "url": "https://www.reddit.com/r/spotify/comments/tvri1h/spotify_blend_playlists_just_arent_good/",
+      "source_type": "reddit",
+      "topics": [
+        "blend",
+        "social_discovery",
+        "recommendations"
+      ],
+      "preview_text": "Reddit - Please wait for verification",
+      "author": "Unknown",
+      "subreddit": "r/spotify"
+    },
+    {
+      "id": "spotify_forum_001",
+      "title": "New Queue UI Customer Feedback",
+      "url": "https://community.spotify.com/t5/Content-Questions/New-Queue-UI-Customer-Feedback/td-p/6647974",
+      "source_type": "spotify_official",
+      "topics": [
+        "queue_ui",
+        "ux",
+        "user_feedback"
+      ],
+      "preview_text": "New Queue UI Customer Feedback - The Spotify Community Skip to content Announcements Spotify Community Help Help Home Ongoing Issues FAQs Help Categories Accounts Subscriptions Premium Family Premium Student Your Library Content Questions Spotify for Developers Other (Podcasts, Partners, etc.) iOS (iPhone, iPad) Android Desktop (Windows) Desktop (Mac) Desktop (Linux) Chat Chat Home Music Exchange Music Discussion Discovery & Promo Social & Random Podcast Discussion Ideas Ideas Home Idea Categories Live Ideas Closed Ideas Implemented Ideas Log In All communityThis categoryThis boardFAQsUsers cancel Turn on suggestions Auto-suggest helps you quickly narrow down your search results by suggesting possible matches as you type. Showing results for Search instead for Did you mean: All communityThis categoryThis boardFAQsUsers cancel Turn on suggestions Auto-suggest helps you quickly narrow down your search results by suggesting possible matches as you type. Showing results for Search instead for Did you mean: You are here Home Help Content Questions New Queue UI Customer Feedback Main sections Help Help Home Ongoing Issues FAQs Help Categories Accounts Subscriptions Premium Family Premium Student Your Library Content Questions Spotify for Developers Other (Podcasts, Partners, etc.) iOS (iPhone, iPad) Android Desktop (Windows) Desktop (Mac) Desktop (Linux) Chat Chat Home Music Exchange Music Discussion Discovery & Promo Social & Random Podcast Discussion Ideas Ideas Home Ideas Categories Live Ideas Closed Ideas Implemented Ideas Additional sections Community Guidelines Community Blog FAQs Spotify Stars Spotify Stars Home Vault Vault Home The Blog Vault App & Features Legacy Announcements Car Thing Welcome Community Blog FAQs Help Ongoing Issues Accounts Subscriptions Premium Family Premium Student Your Library iOS (iPhone, iPad) Android Desktop (Windows) Desktop (Mac) Desktop (Linux) Content Questions Other (Podcasts, Partners, etc.) Spotify for Developers Chat Music Exchan",
+      "author": "Unknown"
+    },
+    {
+      "id": "spotify_forum_002",
+      "title": "Ongoing Issues Review April 2026",
+      "url": "https://community.spotify.com/t5/Community-Blog/Ongoing-Issues-Review-April-2026/ba-p/7423811",
+      "source_type": "spotify_official",
+      "topics": [
+        "bugs",
+        "smart_shuffle",
+        "playlist_issues"
+      ],
+      "preview_text": "Ongoing Issues Review: April 2026 - The Spotify Community Skip to content Announcements Spotify Community Help Help Home Ongoing Issues FAQs Help Categories Accounts Subscriptions Premium Family Premium Student Your Library Content Questions Spotify for Developers Other (Podcasts, Partners, etc.) iOS (iPhone, iPad) Android Desktop (Windows) Desktop (Mac) Desktop (Linux) Chat Chat Home Music Exchange Music Discussion Discovery & Promo Social & Random Podcast Discussion Ideas Ideas Home Idea Categories Live Ideas Closed Ideas Implemented Ideas Log In All communityThis categoryBlogFAQsUsers cancel Turn on suggestions Auto-suggest helps you quickly narrow down your search results by suggesting possible matches as you type. Showing results for Search instead for Did you mean: All communityThis categoryBlogFAQsUsers cancel Turn on suggestions Auto-suggest helps you quickly narrow down your search results by suggesting possible matches as you type. Showing results for Search instead for Did you mean: You are here Home Welcome Community Blog Ongoing Issues Review: April 2026 Main sections Help Help Home Ongoing Issues FAQs Help Categories Accounts Subscriptions Premium Family Premium Student Your Library Content Questions Spotify for Developers Other (Podcasts, Partners, etc.) iOS (iPhone, iPad) Android Desktop (Windows) Desktop (Mac) Desktop (Linux) Chat Chat Home Music Exchange Music Discussion Discovery & Promo Social & Random Podcast Discussion Ideas Ideas Home Ideas Categories Live Ideas Closed Ideas Implemented Ideas Additional sections Community Guidelines Community Blog FAQs Spotify Stars Spotify Stars Home Vault Vault Home The Blog Vault App & Features Legacy Announcements Car Thing Welcome Community Blog FAQs Help Ongoing Issues Accounts Subscriptions Premium Family Premium Student Your Library iOS (iPhone, iPad) Android Desktop (Windows) Desktop (Mac) Desktop (Linux) Content Questions Other (Podcasts, Partners, etc.) Spotify for Developers Chat Music Exchange Pod",
+      "author": "Unknown"
+    },
+    {
+      "id": "research_001",
+      "title": "Understanding and Evaluating User Satisfaction with Music Discovery",
+      "url": "https://research.atspotify.com/2018/07/understanding-and-evaluating-user-satisfaction-with-music-discovery",
+      "source_type": "spotify_research",
+      "topics": [
+        "discovery",
+        "user_satisfaction",
+        "research"
+      ],
+      "preview_text": "Understanding and Evaluating User Satisfaction with Music Discovery | Spotify ResearchUnderstanding and Evaluating User Satisfaction with Music DiscoveryIf you’re a Spotify user, you may be familiar with Discover Weekly—your weekly, personalized playlist of music you’ve never heard before. Discovery is an important part of the music listening experience. But because music discovery is an incredibly personal and subjective experience, we have much to learn about users’ expectations for discovery, especially in the context of recommendations such as the tracks included in a Discover Weekly playlist.Our research, “Understanding and Evaluating User Satisfaction with Music Discovery,” presented at SIGIR 2018, aims to provide insight into perceptions around discovery by looking at listeners’ feelings and habits surrounding their Discover Weekly lists. We use a mixed methods approach to try to understand users’ expectations with Discover Weekly, determine which interactions with the playlist could signal user satisfaction, and show how models of user satisfaction could be used to evaluate and optimize recommender systems.Our approachWe decided to use a mixed methods approach in order to form a deep understanding of users’ motivations, so that we could develop evaluation metrics that we are confident measure the right things from the users’ point of view.Our mixed methods work consisted of multiple studies in a sequential exploratory design, meaning we start with a qualitative study to explore the space, and follow up with quantitative studies to scale up the findings. In our qualitative user research study, we interviewed users to generate hypotheses about user satisfaction with Discover Weekly.The subsequent quantitative data analysis and modeling validated these hypotheses at scale.Qualitative analysis and hypothesesWe conducted 1:1 semi-structured interviews with ten participants, asking questions like “What do you expect from your discovery recommendations?” and “Descr",
+      "author": "Spotify Research",
+      "date": "2018-07"
+    },
+    {
+      "id": "research_002",
+      "title": "User Intents and Satisfaction with Slate Recommendations",
+      "url": "https://research.atspotify.com/user-intents-and-satisfaction-with-slate-recommendations",
+      "source_type": "spotify_research",
+      "topics": [
+        "recommendations",
+        "user_intent",
+        "slate"
+      ],
+      "preview_text": "User Intents and Satisfaction with Slate Recommendations | Spotify ResearchUser Intents and Satisfaction with Slate RecommendationsAn increasingly larger proportion of users rely on recommendation systems to pro-actively serve them recommendations based on diverse user needs and expectations. Developing a better understanding of how users interact with such recommender systems is important not only for improving user experience but also for developing satisfaction metrics for effective and efficient optimization of the recommendation algorithm. This is especially true in the case of online streaming services like Spotify, wherein the recommender system could gauge user satisfaction and adapt its recommendations to better serve users.User interaction with such systems is often motivated by a specific need or intent, often not explicitly specified by the user, but can nevertheless inform on how the user interacts with, and the extent to which the user is satisfied by the recommendations served. We hypothesize that user interactions are conditional on the specific intent users have when interacting with a recommendation system, and highlight the need for explicitly considering user intent when interpreting interaction signals.While search systems have access to explicit queries from users, to understand user intent, interpret interaction signals, and subsequently differentiate between success and failure, recommender systems, on the other hand, usually lack such explicit indicators of user intent and as a consequence, clear indicators of success. Indeed, the interpretation of signals varies with goals; for example, scrolling can indicate negative experience when the goal is to quickly listen to music now, but can also indicate a positive experience when the goal is to browse the diverse collection of music the system has to offer. Furthermore, interpreting interaction signals becomes especially hard in the context of complex recommendation settings, like Slate recommen",
+      "author": "Spotify Research",
+      "date": "unknown"
+    }
+  ]
+}

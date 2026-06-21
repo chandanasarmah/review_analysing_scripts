@@ -144,11 +144,16 @@ def fetch_and_compile():
     print("\n" + "=" * 80)
     print(f"Results: {compiled['metadata']['successful']}/{compiled['metadata']['total_attempted']} successful")
 
-    # Save compiled results
+    # Save compiled results — output/ for runtime use, input/ as committed fallback
     output_path = OUTPUT / "research_compiled.json"
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(compiled, f, ensure_ascii=False, indent=2)
     print(f"\nSaved to: {output_path}")
+
+    input_path = INPUT / "research_compiled.json"
+    with open(input_path, 'w', encoding='utf-8') as f:
+        json.dump(compiled, f, ensure_ascii=False, indent=2)
+    print(f"Also saved to: {input_path}")
 
     # Also save as text file for manual review
     text_path = OUTPUT / "RESEARCH_ARTICLES_FULL.txt"

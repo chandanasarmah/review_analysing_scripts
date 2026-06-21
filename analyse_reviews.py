@@ -42,6 +42,7 @@ CATEGORISED_PATH = OUTPUT / "reviews_categorised.json"
 INSIGHTS_PATH = OUTPUT / "insights_report.json"
 RESEARCH_SOURCES_PATH = INPUT / "research_sources.json"
 RESEARCH_COMPILED_PATH = OUTPUT / "research_compiled.json"
+RESEARCH_COMPILED_INPUT_PATH = INPUT / "research_compiled.json"
 
 THEMES = [
     "ads",
@@ -318,10 +319,11 @@ def load_research_sources():
 
 
 def load_research_compiled():
-    """Load compiled research articles with full text."""
-    if not RESEARCH_COMPILED_PATH.exists():
+    """Load compiled research articles. Prefers output/ fresh fetch; falls back to input/ committed copy."""
+    path = RESEARCH_COMPILED_PATH if RESEARCH_COMPILED_PATH.exists() else RESEARCH_COMPILED_INPUT_PATH
+    if not path.exists():
         return []
-    with open(RESEARCH_COMPILED_PATH, encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         data = json.load(f)
         return data.get("articles", [])
 
@@ -391,8 +393,13 @@ def main():
         print(f"Run parse_reviews.py first to generate output files in the output/ folder.")
         return
 
-    # If categorised file already exists (manual or prior AI run), use it directly
-    if CATEGORISED_PATH.exists():
+    # Use cached categorised file only if it is newer than the unified file.
+    # If reviews_unified.json was regenerated (more/fewer reviews), re-tag.
+    use_cache = (
+        CATEGORISED_PATH.exists() and
+        CATEGORISED_PATH.stat().st_mtime >= UNIFIED_PATH.stat().st_mtime
+    )
+    if use_cache:
         print(f"Found existing output/{CATEGORISED_PATH.name} — skipping tagging step.")
         with open(CATEGORISED_PATH, encoding="utf-8") as f:
             reviews = json.load(f)
@@ -401,6 +408,7 @@ def main():
         with open(UNIFIED_PATH, encoding="utf-8") as f:
             reviews = json.load(f)
         print(f"Loaded {len(reviews)} reviews from output/{UNIFIED_PATH.name}")
+
 
         api_key = os.environ.get("ANTHROPIC_API_KEY")
 
