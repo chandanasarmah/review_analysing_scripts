@@ -46,11 +46,17 @@ st.markdown("""
   .stApp           { background: #0b0e0f; }
   .block-container { padding-top: 1rem !important; }
 
-  /* ── Sidebar shell ──────────────────────────────────────────────────── */
+  /* ── Sidebar — always visible, never collapsible ───────────────────── */
   section[data-testid="stSidebar"] {
     background: #0f1416 !important;
     border-right: 1px solid #1e2a2e;
+    min-width: 280px !important;
   }
+  /* Hide the collapse/expand toggle buttons */
+  [data-testid="stSidebarCollapseButton"],
+  [data-testid="collapsedControl"],
+  button[aria-label="Close sidebar"],
+  button[aria-label="Open sidebar"] { display: none !important; }
   section[data-testid="stSidebar"],
   section[data-testid="stSidebar"] p,
   section[data-testid="stSidebar"] span,
