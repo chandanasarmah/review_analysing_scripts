@@ -35,6 +35,7 @@ st.set_page_config(
     page_title="Spotify Review Analyser",
     page_icon="🎵",
     layout="wide",
+    initial_sidebar_state="expanded",
 )
 
 st.markdown("""
