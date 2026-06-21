@@ -208,7 +208,9 @@ def slot_status():
 
 # ── Session state ─────────────────────────────────────────────────────────────
 if "processed_uploads" not in st.session_state:
-    st.session_state.processed_uploads = set()
+    st.session_state.processed_uploads = set()   # set of (name, size) tuples
+if "processed_slots" not in st.session_state:
+    st.session_state.processed_slots = {}        # (name, size) -> slot filename
 if "running" not in st.session_state:
     st.session_state.running = False
 if "fetch_research" not in st.session_state:
@@ -236,6 +238,26 @@ with st.sidebar:
             "Choose files", type=["txt"],
             accept_multiple_files=True, label_visibility="collapsed",
         )
+
+        # Detect removals: any previously processed file no longer in the uploader
+        current_uids = {(uf.name, uf.size) for uf in (uploaded_files or [])}
+        removed_uids = st.session_state.processed_uploads - current_uids
+        if removed_uids:
+            for uid in removed_uids:
+                slot = st.session_state.processed_slots.get(uid)
+                if slot:
+                    p = INPUT_DIR / slot
+                    if p.exists():
+                        p.unlink()
+                st.session_state.processed_slots.pop(uid, None)
+            st.session_state.processed_uploads -= removed_uids
+            # Clear outputs so the report doesn't show stale data
+            for out_file in ["report.html", "reviews_unified.json",
+                             "reviews_categorised.json", "insights_report.json"]:
+                p = OUTPUT_DIR / out_file
+                if p.exists():
+                    p.unlink()
+
         if uploaded_files:
             for uf in uploaded_files:
                 uid = (uf.name, uf.size)
@@ -258,6 +280,7 @@ with st.sidebar:
                         slot = save_uploaded_file(content_bytes, file_type)
                         st.success(f"**{uf.name}** → {TYPE_LABEL[file_type]}\n_Detected: {reason}_\nSaved as `input/{slot}`")
                         st.session_state.processed_uploads.add(uid)
+                        st.session_state.processed_slots[uid] = slot
                     except Exception as e:
                         st.error(f"**{uf.name}** — could not save: {e}")
 
