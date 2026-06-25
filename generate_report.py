@@ -187,6 +187,12 @@ QUESTION_EXPLAIN = {
     "Which user segments experience the most discovery challenges?":
         "Every review grouped by inferred user segment. Compares review volume and sentiment to identify "
         "which type of user is most underserved.",
+    "What listening behaviors are users trying to achieve?":
+        "Reviews categorised by the listening context users describe — study, workout, commute, mood, "
+        "social, and background listening. Reveals the use-cases Spotify must serve well.",
+    "What unmet needs emerge consistently across reviews?":
+        "Reviews expressing unmet needs, wishes, or feature requests with non-positive sentiment. "
+        "Theme breakdown shows which gaps appear most frequently across all platforms.",
 }
 
 
@@ -225,6 +231,7 @@ def render_question(q, idx):
             neg = sent.get("negative", 0)
             pos = sent.get("positive", 0)
             mix = sent.get("mixed", 0)
+            neg_rate = data.get("negative_rate", (neg / tot if tot else 0))
             top_theme = next(iter(data.get("top_themes", {})), "")
             is_worst = seg == q.get("worst_affected_segment")
             worst_tag = ' <span class="worst-tag">Most affected</span>' if is_worst else ""
@@ -232,14 +239,25 @@ def render_question(q, idx):
               <td><strong>{esc(label(seg, SEGMENT_LABELS))}</strong>{worst_tag}</td>
               <td>{tot}</td>
               <td class="neg">{neg}</td>
+              <td class="neg"><strong>{neg_rate * 100:.1f}%</strong></td>
               <td class="mix">{mix}</td>
               <td class="pos">{pos}</td>
               <td>{esc(label(top_theme, THEME_LABELS))}</td>
             </tr>''')
         body_parts.append(f'''<table class="seg-table">
-          <thead><tr><th>Segment</th><th>Reviews</th><th>Neg</th><th>Mixed</th><th>Pos</th><th>Top Theme</th></tr></thead>
+          <thead><tr><th>Segment</th><th>Reviews</th><th>Neg</th><th>Neg %</th><th>Mixed</th><th>Pos</th><th>Top Theme</th></tr></thead>
           <tbody>{"".join(rows)}</tbody>
         </table>''')
+        worst_lbl = label(q.get("worst_affected_segment", ""), SEGMENT_LABELS)
+        body_parts.append(f'''<div class="method-note">
+          <strong>How "most affected" is chosen:</strong> We rank by <em>negative rate</em>
+          (% of a segment's reviews that are negative), not raw count — raw count just rewards
+          the biggest bucket. Segments need ≥200 reviews to qualify (so tiny samples can't win on
+          noise), and the unclassified catch-all is excluded since it's a tagging gap, not a real
+          audience. Among the segments that are statistically tied on pain, we prioritise by Growth
+          lever and real reach. <strong>{esc(worst_lbl)}</strong> tops the list: near-highest negative
+          rate, by far the largest genuine audience, and a direct conversion-to-Premium revenue lever.
+        </div>''')
 
     # Quotes (top_quotes or evidence_quotes)
     quotes = q.get("top_quotes") or q.get("evidence_quotes") or []
@@ -264,6 +282,9 @@ def render_question(q, idx):
       {"".join(body_parts)}
     </section>'''
 
+
+_NUM_WORDS = {1: "One", 2: "Two", 3: "Three", 4: "Four", 5: "Five",
+              6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten"}
 
 questions_html = "".join(render_question(q, i + 1) for i, q in enumerate(questions))
 
@@ -378,6 +399,29 @@ source_chips = "".join(
     f'<span class="chip">{label(k, SOURCE_LABELS)}: <strong>{v}</strong></span>'
     for k, v in source_breakdown.items()
 )
+
+# Build a dynamic description based on what sources were actually uploaded
+_active_sources = {k: v for k, v in source_breakdown.items() if v > 0}
+_source_names = [label(k, SOURCE_LABELS) for k in _active_sources]
+_dominant = max(_active_sources, key=_active_sources.get) if _active_sources else None
+_platform_count = len(_active_sources)
+if _platform_count == 0:
+    data_sources_desc = "No reviews loaded."
+elif _platform_count == 1:
+    data_sources_desc = f"Reviews were collected from {_source_names[0]}."
+else:
+    _parts = ", ".join(_source_names[:-1]) + f" and {_source_names[-1]}"
+    _dominant_label = label(_dominant, SOURCE_LABELS) if _dominant else ""
+    _extras = []
+    if "apple_ios" in _active_sources:
+        _extras.append("Apple iOS contributes star-rated records")
+    if "reddit" in _active_sources:
+        _extras.append("Reddit adds qualitative depth")
+    _extra_str = (" — " + "; ".join(_extras) + ".") if _extras else "."
+    data_sources_desc = (
+        f"Reviews were collected from {_parts}. "
+        f"Volume is dominated by {_dominant_label}{_extra_str}"
+    )
 
 page = f'''<!DOCTYPE html>
 <html lang="en">
@@ -529,6 +573,13 @@ page = f'''<!DOCTYPE html>
   .seg-table .pos {{ color: var(--pos); }}
   .worst-row {{ background: rgba(231,76,60,0.07); }}
   .worst-tag {{ font-size: 10px; background: var(--neg); color: #fff; border-radius: 10px; padding: 2px 8px; margin-left: 6px; text-transform: uppercase; letter-spacing: 0.5px; }}
+  .method-note {{
+    background: rgba(29,185,84,0.06); border-left: 3px solid var(--green);
+    border-radius: 6px; padding: 12px 16px; margin-top: 14px;
+    font-size: 13px; line-height: 1.65; color: var(--muted);
+  }}
+  .method-note strong {{ color: var(--text); }}
+  .method-note em {{ color: var(--green); font-style: normal; }}
 
   /* Research */
   .research-grid {{ display: grid; gap: 12px; }}
@@ -669,11 +720,9 @@ page = f'''<!DOCTYPE html>
 
   <div class="stats-grid">
     {stat_card(f"{total_reviews:,}", "Reviews Analysed")}
-    {stat_card(source_breakdown.get("google_play", 0), "Google Play")}
-    {stat_card(source_breakdown.get("apple_ios", 0), "Apple iOS")}
-    {stat_card(source_breakdown.get("reddit", 0), "Reddit")}
+    {"".join(stat_card(v, label(k, SOURCE_LABELS)) for k, v in source_breakdown.items() if v > 0)}
     {stat_card(discovery_related, "Discovery-Related")}
-    {stat_card(avg_rating if avg_rating else "—", "Avg Rating", "Apple only")}
+    {stat_card(avg_rating if avg_rating else "—", "Avg Rating", "Apple only") if source_breakdown.get("apple_ios", 0) > 0 else ""}
   </div>
 
   <section>
@@ -693,7 +742,7 @@ page = f'''<!DOCTYPE html>
   <section>
     <div class="section-head">
       <h2><span class="dot"></span>Data Sources</h2>
-      <p>Reviews were collected from three platforms. Volume is dominated by Google Play, with Reddit adding qualitative depth and Apple iOS contributing the only star-rated records.</p>
+      <p>{data_sources_desc}</p>
     </div>
     <div>{source_chips}</div>
   </section>
@@ -708,7 +757,7 @@ page = f'''<!DOCTYPE html>
 
   <section>
     <div class="section-head">
-      <h2><span class="dot"></span>The Four Questions</h2>
+      <h2><span class="dot"></span>The {_NUM_WORDS.get(len(questions), str(len(questions)))} Questions</h2>
       <p>The core of the analysis. Each question is answered with quantitative breakdowns from user reviews, the actual voices behind the numbers, and supporting passages pulled from independent research.</p>
     </div>
     {questions_html}
@@ -774,13 +823,19 @@ const THEME_DATA = {theme_data_json};
 const THEME_LABELS = {json.dumps(THEME_LABELS)};
 const SOURCE_LABELS = {json.dumps(SOURCE_LABELS)};
 
+console.log('[SpotifyRA] Report loaded.');
+console.log('[SpotifyRA] Themes available:', Object.keys(THEME_DATA));
+console.log('[SpotifyRA] Total theme-tagged entries:', Object.values(THEME_DATA).reduce((s,a)=>s+a.length,0));
+
 let _currentReviews = [];
 let _shownCount = 0;
 const PAGE_SIZE = 20;
 
 function showTheme(key) {{
+  console.log('[SpotifyRA] showTheme:', key);
   const reviews = THEME_DATA[key] || [];
   const label = THEME_LABELS[key] || key;
+  console.log('[SpotifyRA]', label, '— review count:', reviews.length);
 
   _currentReviews = reviews;
   _shownCount = 0;
@@ -795,6 +850,7 @@ function showTheme(key) {{
   const negP = (counts.negative / total * 100).toFixed(1);
   const posP = (counts.positive / total * 100).toFixed(1);
   const mixP = (100 - negP - posP).toFixed(1);
+  console.log('[SpotifyRA] Sentiment — neg:', negP+'%', 'pos:', posP+'%', 'mix:', mixP+'%');
   document.getElementById('panel-sent-bar').innerHTML =
     `<div class="ts-neg" style="width:${{negP}}%"></div>` +
     `<div class="ts-pos" style="width:${{posP}}%"></div>` +
@@ -806,6 +862,7 @@ function showTheme(key) {{
 
   // Top quotes
   const quotes = reviews.filter(r => r.key_quote).slice(0, 5);
+  console.log('[SpotifyRA] Key quotes found:', quotes.length);
   const qDiv = document.getElementById('panel-quotes');
   if (quotes.length) {{
     qDiv.innerHTML = '<h4>Key Quotes</h4><ul class="quote-list">' +
@@ -821,11 +878,13 @@ function showTheme(key) {{
   document.getElementById('detail-panel').classList.add('open');
   document.getElementById('panel-overlay').classList.add('open');
   document.querySelector('.panel-body').scrollTop = 0;
+  console.log('[SpotifyRA] Panel opened for:', label);
 }}
 
 function appendReviews() {{
   const slice = _currentReviews.slice(_shownCount, _shownCount + PAGE_SIZE);
-  if (!slice.length) return;
+  console.log('[SpotifyRA] appendReviews — shownCount:', _shownCount, 'slice:', slice.length, 'total:', _currentReviews.length);
+  if (!slice.length) {{ console.warn('[SpotifyRA] No more reviews to load.'); return; }}
   const container = document.getElementById('panel-reviews');
   let firstNew = null;
   slice.forEach((r, i) => {{
@@ -848,11 +907,14 @@ function appendReviews() {{
   }});
   _shownCount += slice.length;
   const btn = document.getElementById('load-more-btn');
-  btn.style.display = _shownCount < _currentReviews.length ? 'block' : 'none';
+  const hasMore = _shownCount < _currentReviews.length;
+  btn.style.display = hasMore ? 'block' : 'none';
+  console.log('[SpotifyRA] After append — shownCount:', _shownCount, 'hasMore:', hasMore, 'btn visible:', hasMore);
   if (firstNew) firstNew.scrollIntoView({{ behavior: 'smooth', block: 'nearest' }});
 }}
 
 function loadMore() {{
+  console.log('[SpotifyRA] loadMore clicked');
   appendReviews();
 }}
 
@@ -869,6 +931,7 @@ function toggleText(idx) {{
 }}
 
 function closePanel() {{
+  console.log('[SpotifyRA] Panel closed');
   document.getElementById('detail-panel').classList.remove('open');
   document.getElementById('panel-overlay').classList.remove('open');
 }}

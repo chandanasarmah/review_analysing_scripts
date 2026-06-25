@@ -5,6 +5,11 @@ input/*.txt
 # Generated output contains PII (author names) and large data files
 output/
 
+# Runtime artifacts (UI upload manifest, debug logs)
+input/.ui_uploads.json
+streamlit_debug.log
+*.log
+
 # Internal Claude Code config and plans
 .claude/
 CLAUDE.md
@@ -19,6 +24,7 @@ To build a robust AI.docx
 *.key
 *_secret*
 ANTHROPIC_API_KEY*
+.streamlit/secrets.toml
 
 # ─── Python ────────────────────────────────────────────────────────────
 __pycache__/
